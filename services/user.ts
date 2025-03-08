@@ -1,7 +1,9 @@
+import { User } from "./schemas/User";
+
 const backendAdress = "192.168.20.66"
 const backendPort = 3000
 
-class UserService {
+export class UserService {
     static async getUser(name: string){
         var res = await fetch(`http://${backendAdress}:${backendPort}/data/users`, {
             method: "POST",
@@ -13,6 +15,6 @@ class UserService {
             }
           });
 
-        return await res.json()
+        return await User.fromObject(res.json())
     }
 }
