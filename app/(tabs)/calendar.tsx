@@ -4,10 +4,16 @@ import { Calendar, LocaleConfig } from "react-native-calendars";
 import { UserService } from "@/services/user";
 import { MedicationService } from "@/services/medicationService";
 import { Medication } from "@/services/schemas/Medication";
+import { colors } from "@/component/colors";
+import TodayDate from "@/component/TodayDate";
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString + "T00:00:00"); // Ensure it starts at midnight local time
-  const options: Intl.DateTimeFormatOptions = { day: "numeric", month: "long" };
+  const options: Intl.DateTimeFormatOptions = {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  };
   return date.toLocaleDateString("en-US", options);
 };
 
@@ -54,9 +60,7 @@ export default function CalendarView() {
       />
 
       <View style={styles.flexColumn}>
-        <Text style={styles.text}>
-          {selected ? formatDate(selected) : "Hello ??"}
-        </Text>
+        <TodayDate date={selected} />
         {filteredMedications.length > 0 ? (
           filteredMedications.map((med, index) => (
             <Text key={index} style={styles.text}>
