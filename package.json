@@ -43,6 +43,7 @@
     "react-native-swipe-verify": "^0.1.6",
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.5",
+    "rn-swipe-button": "^3.0.1",
     "rn-swipe-to-confirm": "^0.0.2"
   },
   "devDependencies": {

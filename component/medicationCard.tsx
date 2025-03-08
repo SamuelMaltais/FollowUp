@@ -1,7 +1,8 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-// @ts-ignore
-import RNSwipeVerify from 'react-native-swipe-verify'
-import {useState} from "react";
+import {Dimensions, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+
+import SwipeButton from 'rn-swipe-button';
+import {useCallback, useState} from "react";
+import {colors} from "@/component/colors";
 
 interface MedicationCardProps {
     time: string
@@ -11,15 +12,33 @@ interface MedicationCardProps {
     confirmed?: boolean
 }
 
+const CheckMarkIcon = () => {
+    return (
+        <View style={{
+            width: 30,
+            height: 30,
+            borderRadius: 15,
+            backgroundColor: colors.lavender,
+            alignItems: 'center',
+            justifyContent: 'center',
+        }}>
+            <Text style={{
+                color: 'white',
+                fontSize: 18,
+                fontWeight: 'bold',
+            }}>✓</Text>
+        </View>
+    );
+};
+
+
 export const MedicationCard = ({ time, medicationName, amount, imageSource, confirmed = false }: MedicationCardProps) => {
 
-    const [isUnlocked, setIsUnlocked] = useState(false)
-    const [isUploading, setIsUploading] = useState(false)
 
     return (
-
-        <View style={styles.timelineItem}>
+        <View style={styles.container}>
             <Text style={styles.timeText}>{time}</Text>
+
             <View style={styles.medicationCard}>
                 <Image source={imageSource} style={styles.medicationImage} />
                 <Text style={styles.medicationName}>{medicationName}</Text>
@@ -27,72 +46,54 @@ export const MedicationCard = ({ time, medicationName, amount, imageSource, conf
                     <Text style={styles.amountLabel}>Amount : </Text>
                     <Text style={styles.amountValue}>{amount}</Text>
                 </View>
-                <TouchableOpacity style={styles.confirmButton}>
-                    <Text style={styles.confirmText}>Confirm taken</Text>
-                    <View style={styles.checkCircle}>
-                        <Text style={styles.checkmark}>✓</Text>
-                    </View>
-                </TouchableOpacity>
-                <RNSwipeVerify ref={(ref: any) => null}
-                               width={200}
-                               buttonSize={60}
-                               borderColor="#fff"
-                               buttonColor="#37474F"
-                               backgroundColor="#ececec"
-                               textColor="#37474F"
-                               okButton={{ visible: false, duration: 400 }}
-                               onVerified={() => {
-                                   setIsUnlocked(true)
-                               }}
-                               icon={<Image source={isUnlocked ? require('./../assets/images/check.png') : require('./../assets/images/check.png')} style={{ width: 40, height: 40 }} />}
-                >
 
-                    <Text>{isUnlocked ? 'UNLOCKED' : 'slide to unlock'}</Text>
+                <SwipeButton
+                    disabled={false}
+                    //disable the button by doing true (Optional)
+                    swipeSuccessThreshold={70}
+                    width={Dimensions.get("window").width - 120}
 
-                </RNSwipeVerify>
+                    title="Confirm taken >>"
+                    titleFontSize={16}
+                    titleColor="#666"
+                    thumbIconComponent={CheckMarkIcon}
+                    //Text inside the button (Optional)
+                    //thumbIconImageSource={thumbIcon}
+                    //You can also set your own icon for the button (Optional)
+                    onSwipeSuccess={() => {
+                        alert('Submitted Successfully!');
+                    }}
+                    //After the completion of swipe (Optional)
+                    railFillBackgroundColor="#fff" //(Optional)
+                    railFillBorderColor= {colors.lavender} //(Optional)
+
+                    thumbIconBackgroundColor= {colors.lavender} //(Optional)
+                    thumbIconBorderColor= {colors.lavender} //(Optional)
+                    railBackgroundColor="#fff" //(Optional)
+                    railBorderColor= {colors.lavender} //(Optional)
+                />
+
 
 
                 <TouchableOpacity style={styles.prescriptionButton}>
                     <Text style={styles.prescriptionButtonText}>See my prescription</Text>
                 </TouchableOpacity>
             </View>
-            <View style={styles.timelineDot} />
+
         </View>
     )
 }
 
 
 const styles = StyleSheet.create({
-    timeline: {
-        paddingHorizontal: 20,
-        paddingTop: 20,
-    },
-    timelineBar: {
-        position: "absolute",
-        width: 2,
-        backgroundColor: "#e9d18c",
-        top: 40,
-        bottom: 0,
-        right: 20,
-    },
-    timelineItem: {
-        marginBottom: 30,
-        position: "relative",
+    container: {
+        marginTop: 30,
     },
     timeText: {
-        fontSize: 16,
-        fontWeight: "500",
+        fontSize: 20,
         marginBottom: 10,
         color: "#333",
-    },
-    timelineDot: {
-        position: "absolute",
-        width: 10,
-        height: 10,
-        borderRadius: 5,
-        backgroundColor: "#e9a06c",
-        right: 0,
-        top: 40,
+        fontFamily: "Antic",
     },
     medicationCard: {
         backgroundColor: "white",
@@ -106,17 +107,17 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     medicationImage: {
-        width: 80,
-        height: 40,
+        width: 100,
+        height: 80,
         resizeMode: "contain",
         marginBottom: 10,
     },
     medicationName: {
         fontSize: 16,
         fontWeight: "500",
-        marginBottom: 10,
+        marginVertical: 15,
         textAlign: "center",
-        fontFamily: "Gambetta",
+        fontFamily: "DomineBold",
     },
     amountContainer: {
         flexDirection: "row",
@@ -161,6 +162,7 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         paddingVertical: 12,
         paddingHorizontal: 20,
+        marginTop: 20,
         width: "100%",
         alignItems: "center",
     },
@@ -169,3 +171,5 @@ const styles = StyleSheet.create({
         fontWeight: "500",
     },
 })
+
+

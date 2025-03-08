@@ -19,10 +19,9 @@ const styles = StyleSheet.create({
   dateText: {
     backgroundColor: colors.peach_yellow,
     color: "white",
-    fontFamily: "Gambetta",
-    fontSize: 27,
-    fontWeight: 600,
-    paddingHorizontal: 50,
+    fontFamily: "DomineBold",
+    fontSize: 20,
+    paddingHorizontal: 40,
     paddingVertical: 15,
     width: "100%",
     borderRadius: 20,

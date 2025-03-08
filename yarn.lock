@@ -6333,6 +6333,11 @@ rimraf@~2.6.2:
   dependencies:
     glob "^7.1.3"
 
+rn-swipe-button@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/rn-swipe-button/-/rn-swipe-button-3.0.1.tgz#6d9beab2688364c9c8516885422bbde4e650af88"
+  integrity sha512-80NHH29PiaZedlVj0pMi7DIWo4Fj9ugJDe9YJdkhXPS0q7nNK3iTx+zCWR/S+u5fqlGGw0/r5axDBU7pQ9LHkQ==
+
 rn-swipe-to-confirm@^0.0.2:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/rn-swipe-to-confirm/-/rn-swipe-to-confirm-0.0.2.tgz#f4a31a344791717c8ec7a16f312f103b9a1556fd"

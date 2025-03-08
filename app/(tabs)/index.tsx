@@ -10,6 +10,10 @@ import TodayDate from "@/component/TodayDate";
 const loadFonts = () => {
   return Font.loadAsync({
     Gambetta: require("./../../assets/fonts/Gambetta.ttf"),
+    DomineBold: require("./../../assets/fonts/Domine-Bold.ttf"),
+    DomineRegular: require("./../../assets/fonts/Domine-Regular.ttf"),
+    DomineSemiBold: require("../../assets/fonts/Domine-SemiBold.ttf"),
+    Antic: require("./../../assets/fonts/Antic-Regular.ttf"),
   })
 }
 
@@ -34,23 +38,20 @@ export default function App() {
     return <Text>Loading...</Text>
   }
 
-  // @ts-ignore
   return (
       <SafeAreaView style={styles.container}>
         <ScrollView style={styles.scrollView} contentContainerStyle={styles.contentContainer}>
+          {/* Header */}
+          <View style={styles.header}>
+            <Text style={styles.headerTitle}>Home</Text>
+            <Text style={styles.greeting}>Hello, Jane Doe</Text>
 
+            <TodayDate />
 
-        {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>Home</Text>
-          <Text style={styles.greeting}>Hello, Jane Doe</Text>
-          <TodayDate />
-        </View>
+            <Text style={styles.party}>Happy Women Day !</Text>
+          </View>
 
-        {/* SCROLL VIEW */}
-        <View style={styles.timeline}>
-          <View style={styles.timelineBar} />
-
+          {/* SCROLL VIEW */}
           <MedicationCard
               time="11:00 am"
               medicationName="Potassium K20 in pills"
@@ -64,10 +65,8 @@ export default function App() {
               amount="2 tablets"
               imageSource={require("./../../assets/images/comprime.png")}
           />
-        </View>
+
         </ScrollView>
-
-
       </SafeAreaView>
   )
 }
@@ -92,31 +91,29 @@ const styles = StyleSheet.create({
     fontFamily: "Gambetta",
   },
   greeting: {
-    fontSize: 32,
+    fontSize: 28,
     fontWeight: "500",
     color: "#333",
     marginBottom: 16,
-    fontFamily: "Gambetta",
+    fontFamily: "DomineRegular",
+  },
+
+  party: {
+    fontSize: 16,
+    fontWeight: "500",
+    color: "#333",
+    marginTop: 16,
+    fontFamily: "DomineRegular",
   },
 
   // SCROLL VIEW
   scrollView: {
-    flex: 1,
+    padding: 20,
   },
+
   contentContainer: {
     paddingBottom: 20,
   },
-  timeline: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
-  },
-  timelineBar: {
-    position: "absolute",
-    width: 2,
-    backgroundColor: "#e9d18c",
-    top: 40,
-    bottom: 0,
-    right: 20,
-  },
+
 })
 
