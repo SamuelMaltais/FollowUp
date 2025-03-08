@@ -10,7 +10,7 @@ function validateDate(dateString: string)
 
     return date;
 }
-class Medication {
+export class Medication {
     prescriptionDate: Date;
     expDate: Date;
     uuid: any;

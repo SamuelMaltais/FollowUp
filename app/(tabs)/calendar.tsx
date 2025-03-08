@@ -2,31 +2,47 @@ import { Text, View, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import { UserService } from "@/services/user";
-import { User } from "@/services/schemas/User";
+import { MedicationService } from "@/services/medicationService";
+import { Medication } from "@/services/schemas/Medication";
 
-async function fetchUser(): Promise<User> {
-  var user: User = await UserService.getUser("Jane Doe");
-  console.log(user);
-  return user;
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString + "T00:00:00"); // Ensure it starts at midnight local time
+  const options: Intl.DateTimeFormatOptions = { day: "numeric", month: "long" };
+  return date.toLocaleDateString("en-US", options);
+};
+
+async function getMedications(setMedications: Function) {
+  const medications = await MedicationService.getPrescriptions("Jackson");
+  setMedications(medications);
+  console.log(medications[0].prescriptionDate.toDateString());
 }
 
 export default function CalendarView() {
   const [selected, setSelected] = useState("");
-  const [medications, setMedications] = useState([]);
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString + "T00:00:00");
-    const options: Intl.DateTimeFormatOptions = {
-      day: "numeric",
-      month: "long",
-    };
-    return date.toLocaleDateString("en-US", options);
-  };
+  const [medications, setMedications] = useState<Medication[]>([]);
 
   useEffect(() => {
-    fetchUser();
+    getMedications(setMedications);
   }, []);
 
+  const filteredMedications = medications.filter(
+    (med) =>
+      med.prescriptionDate.toDateString() == new Date(selected).toDateString()
+  );
+  console.log(selected);
+
+  var markedDates: any = {};
+  medications.forEach((med) => {
+    markedDates[med.prescriptionDate.toISOString().split("T")[0]] = {
+      marked: true,
+      dotColor: "orange",
+    };
+  });
+  markedDates[selected] = {
+    selected: true,
+    disableTouchEvent: true,
+    selectedDotColor: "orange",
+  };
   return (
     <View style={styles.container}>
       <Calendar
@@ -34,23 +50,22 @@ export default function CalendarView() {
           setSelected(day.dateString);
         }}
         style={styles.calendar}
-        markedDates={{
-          "2025-03-16": { marked: true },
-          "2025-03-17": { marked: true },
-          "2025-03-18": { marked: true },
-
-          [selected]: {
-            selected: true,
-            disableTouchEvent: true,
-            selectedDotColor: "orange",
-          },
-        }}
+        markedDates={markedDates}
       />
 
       <View style={styles.flexColumn}>
         <Text style={styles.text}>
-          {selected ? formatDate(selected) : "No date selected"}
+          {selected ? formatDate(selected) : "Hello ??"}
         </Text>
+        {filteredMedications.length > 0 ? (
+          filteredMedications.map((med, index) => (
+            <Text key={index} style={styles.text}>
+              {med.medicationName}
+            </Text>
+          ))
+        ) : (
+          <Text style={styles.text}>No medications for this date</Text>
+        )}
       </View>
     </View>
   );
