@@ -8,6 +8,7 @@ import * as Font from "expo-font"
 const loadFonts = () => {
   return Font.loadAsync({
     Gambetta: require("./../../assets/fonts/Gambetta.ttf"),
+    Antic: require("./../../assets/fonts/Antic-Regular.ttf"),
   })
 }
 
