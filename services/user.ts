@@ -1,6 +1,6 @@
 import { User } from "./schemas/User";
 
-const backendAdress = "192.168.20.66"
+const backendAdress = "localhost"
 const backendPort = 3000
 
 export class UserService {
