@@ -6,6 +6,7 @@ const backendPort = 3000
 
 export class MedicationService {
     static async getPrescriptions(name: string){
+        console.log("WDAWEAE")
         var res = await fetch(`http://${backendAdress}:${backendPort}/data/prescriptions?name=${name}`, {
             method: "GET",
             headers: {
@@ -15,7 +16,7 @@ export class MedicationService {
 
         var obj : any = await res.json()
         var response : Array<Medication> = []
-
+        console.log(response)
         obj.forEach((med: any) => {
             response.push(Medication.fromObject(med))
         });

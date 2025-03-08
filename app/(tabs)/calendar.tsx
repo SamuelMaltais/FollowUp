@@ -20,7 +20,6 @@ const formatDate = (dateString: string) => {
 async function getMedications(setMedications: Function) {
   const medications = await MedicationService.getPrescriptions("Jackson");
   setMedications(medications);
-  console.log(medications[0].prescriptionDate.toDateString());
 }
 
 export default function CalendarView() {
@@ -33,13 +32,13 @@ export default function CalendarView() {
 
   const filteredMedications = medications.filter(
     (med) =>
-      med.prescriptionDate.toDateString() == new Date(selected).toDateString()
+      med.lastTakenDate.toDateString() == new Date(selected).toDateString()
   );
   console.log(selected);
 
   var markedDates: any = {};
   medications.forEach((med) => {
-    markedDates[med.prescriptionDate.toISOString().split("T")[0]] = {
+    markedDates[med.lastTakenDate.toISOString().split("T")[0]] = {
       marked: true,
       dotColor: "orange",
     };
@@ -63,8 +62,9 @@ export default function CalendarView() {
         <TodayDate date={selected} />
         {filteredMedications.length > 0 ? (
           filteredMedications.map((med, index) => (
-            <Text key={index} style={styles.text}>
-              {med.medicationName}
+            <Text key={index} style={[styles.text, { marginTop: 20 }]}>
+              You have taken {med.medicationName} last time on
+              {formatDate(med.lastTakenDate.toISOString().split("T")[0])}
             </Text>
           ))
         ) : (
@@ -82,7 +82,8 @@ const styles = StyleSheet.create({
   },
   flexColumn: {
     alignItems: "center",
-    justifyContent: "center",
+    marginTop: 40,
+    justifyContent: "flex-start",
     flex: 1,
   },
   text: {

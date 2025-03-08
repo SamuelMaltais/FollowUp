@@ -10,9 +10,6 @@ import TodayDate from "@/component/TodayDate";
 const loadFonts = () => {
   return Font.loadAsync({
     Gambetta: require("./../../assets/fonts/Gambetta.ttf"),
-    DomineBold: require("./../../assets/fonts/Domine-Bold.ttf"),
-    DomineRegular: require("./../../assets/fonts/Domine-Regular.ttf"),
-    DomineSemiBold: require("../../assets/fonts/Domine-SemiBold.ttf"),
     Antic: require("./../../assets/fonts/Antic-Regular.ttf"),
   })
 }
