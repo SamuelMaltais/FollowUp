@@ -2,6 +2,13 @@ import { Text, View, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import { UserService } from "@/services/user";
+import { User } from "@/services/schemas/User";
+
+async function fetchUser(): Promise<User> {
+  var user: User = await UserService.getUser("Jane Doe");
+  console.log(user);
+  return user;
+}
 
 export default function CalendarView() {
   const [selected, setSelected] = useState("");
@@ -17,7 +24,7 @@ export default function CalendarView() {
   };
 
   useEffect(() => {
-    var user = UserService.getUser("John");
+    fetchUser();
   }, []);
 
   return (

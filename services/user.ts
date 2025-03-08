@@ -5,16 +5,12 @@ const backendPort = 3000
 
 export class UserService {
     static async getUser(name: string){
-        var res = await fetch(`http://${backendAdress}:${backendPort}/data/users`, {
-            method: "POST",
-            body: JSON.stringify({
-              name: name
-            }),
+        var res = await fetch(`http://${backendAdress}:${backendPort}/data/users?name=${name}`, {
+            method: "GET",
             headers: {
               "Content-type": "application/json; charset=UTF-8"
             }
           });
-
-        return await User.fromObject(res.json())
+        return User.fromObject(await res.json())
     }
 }
