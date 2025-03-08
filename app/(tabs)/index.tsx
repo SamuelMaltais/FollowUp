@@ -3,7 +3,7 @@ import { Text, View, StyleSheet } from "react-native";
 export default function Index() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Home screen</Text>
+      <Text style={styles.text}> Hello</Text>
     </View>
   );
 }
@@ -14,8 +14,9 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     alignItems: "center",
     justifyContent: "center",
+    fontFamily : "Gambetta"
   },
   text: {
-    color: "#fff",
+    color: "#000",
   },
 });
