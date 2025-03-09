@@ -24,17 +24,19 @@ async function getMedications(setMedications: Function) {
 
 export default function CalendarView() {
   const [selected, setSelected] = useState("");
+  console.log(selected);
   const [medications, setMedications] = useState<Medication[]>([]);
-
+  console.log(medications);
   useEffect(() => {
     getMedications(setMedications);
   }, []);
 
   const filteredMedications = medications.filter(
     (med) =>
-      med.lastTakenDate.toDateString() == new Date(selected).toDateString()
+      med.lastTakenDate.toISOString().split("T")[0] === selected
   );
-  console.log(selected);
+
+  console.log(filteredMedications);
 
   var markedDates: any = {};
   medications.forEach((med) => {
@@ -54,21 +56,37 @@ export default function CalendarView() {
         onDayPress={(day: any) => {
           setSelected(day.dateString);
         }}
+        initialDate={selected}
         style={styles.calendar}
+        theme={{
+        backgroundColor: '#ffffff',
+        calendarBackground: '#ffffff',
+        textSectionTitleColor: colors.space_cadet,
+        selectedDayBackgroundColor: colors.lavender,
+        selectedDayTextColor: colors.space_cadet,
+        todayTextColor: colors.orange,
+        dayTextColor: '#2d4150',
+        textDisabledColor: colors.peach_yellow
+      }}
         markedDates={markedDates}
       />
 
       <View style={styles.flexColumn}>
-        <TodayDate date={selected} />
+        {/*<TodayDate date={selected} />*/}
+        <Text style={styles.dateText}>
+          {selected ? formatDate(selected) : "No date selected"}
+        </Text>
         {filteredMedications.length > 0 ? (
           filteredMedications.map((med, index) => (
-            <Text key={index} style={[styles.text, { marginTop: 20 }]}>
-              You have taken {med.medicationName} last time on
-              {formatDate(med.lastTakenDate.toISOString().split("T")[0])}
+            <Text key={index} style={[styles.medText]}>
+              You have taken {med.medicationName} last time on{" "}
+              <Text>
+                 {formatDate(med.lastTakenDate.toISOString().split("T")[0])}
+              </Text>
             </Text>
           ))
         ) : (
-          <Text style={styles.text}>No medications for this date</Text>
+          <Text style={styles.medText}>No medications for this date</Text>
         )}
       </View>
     </View>
@@ -78,7 +96,7 @@ export default function CalendarView() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#25292e",
+    backgroundColor: "white",
   },
   flexColumn: {
     alignItems: "center",
@@ -87,7 +105,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   text: {
-    color: "#fff",
+    color: "black",
     fontSize: 20,
     textAlign: "center",
   },
@@ -95,4 +113,15 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 400,
   },
+  dateText: {
+    fontFamily: "Gambetta",
+    color: colors.space_cadet,
+    fontSize: 30,
+    paddingVertical: 15,
+  },
+  medText: {
+    fontFamily: "Antic",
+    fontSize: 20,
+    paddingHorizontal: 15,
+  }
 });

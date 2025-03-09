@@ -14,3 +14,4 @@ export class UserService {
         return User.fromObject(await res.json())
     }
 }
+

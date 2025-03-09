@@ -18,9 +18,12 @@ export class MedicationService {
         var response : Array<Medication> = []
         console.log(response)
         obj.forEach((med: any) => {
-            response.push(Medication.fromObject(med))
+            const medication = Medication.fromObject(med);
+            medication.calcDosages(); // all dosages are calculated on the fly
+            response.push(medication);
         });
 
         return response
     }
+
 }
