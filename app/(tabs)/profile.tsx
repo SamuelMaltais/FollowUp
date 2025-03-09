@@ -4,7 +4,7 @@ import ScrollView = Animated.ScrollView;
 import {useEffect, useState} from "react";
 import {User} from "@/services/schemas/User";
 import {UserService} from "@/services/user";
-// import 'react-native-get-random-values';
+import 'react-native-get-random-values';
 
 async function fetchUser(name: string, setUser: Function): Promise<void> {
     try {
