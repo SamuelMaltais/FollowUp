@@ -251,11 +251,11 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "#000",
-    fontSize: 18,
+    fontSize: 14,
     fontFamily: "Antic",
   },
   subtitle: {
-    fontSize: 20,
+    fontSize: 14,
     color: colors.space_cadet,
     fontFamily: "Antic",
   },
@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   header: {
-    fontSize: 45,
+    fontSize: 28,
     textAlign: "center",
     fontFamily: "Gambetta",
     marginHorizontal: 20,
@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   header2: {
-    fontSize: 30,
+    fontSize:24,
     textAlign: "center",
     fontFamily: "Gambetta",
     color: colors.space_cadet,
@@ -291,7 +291,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     color: "#aaaaaa",
-    fontSize: 16,
+    fontSize: 14,
     marginBottom: 8,
     fontFamily: "Gambetta",
   },
