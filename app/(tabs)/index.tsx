@@ -5,17 +5,30 @@ import {Text, View, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity} from
 import * as Font from "expo-font"
 import {MedicationCard} from "@/component/medicationCard";
 import TodayDate from "@/component/TodayDate";
+import {useRouter} from "expo-router";
 
 // Create a function to load fonts
 const loadFonts = () => {
   return Font.loadAsync({
     Gambetta: require("./../../assets/fonts/Gambetta.ttf"),
     Antic: require("./../../assets/fonts/Antic-Regular.ttf"),
+    DomineBold: require("./../../assets/fonts/Domine-Bold.ttf"),
+    DomineRegular: require("./../../assets/fonts/Domine-Regular.ttf"),
+    DomineSemiBold: require("../../assets/fonts/Domine-SemiBold.ttf"),
   })
 }
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false)
+  const router = useRouter();
+
+  const handlePress = () => {
+    router.push({
+      pathname: "/presription",
+      params: {
+      },
+    });
+  }
 
   // Load fonts when component mounts
   useEffect(() => {
@@ -54,6 +67,7 @@ export default function App() {
               medicationName="Potassium K20 in pills"
               amount="1 pill"
               imageSource={require("./../../assets/images/comprime2.png")}
+              handlePress={handlePress}
           />
 
           <MedicationCard
@@ -61,6 +75,7 @@ export default function App() {
               medicationName="Potassium K20 in tablet"
               amount="2 tablets"
               imageSource={require("./../../assets/images/comprime.png")}
+              handlePress={handlePress}
           />
 
         </ScrollView>
