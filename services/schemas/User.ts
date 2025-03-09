@@ -5,9 +5,9 @@ export class User {
     name: string;
     branchAddress: string;
     phoneNumber: string;
-    ailments: string[];
+    ailments: string;
     uuid: any;
-    constructor(name: string, branchName: string, branchAddress: string, ailments: string[], phoneNumber: string) {
+    constructor(name: string, branchName: string, branchAddress: string, ailments: string, phoneNumber: string) {
         this.uuid = uuidv4();
         this.name = name;
         this.branchName = branchName;
@@ -23,7 +23,7 @@ export class User {
             typeof obj.name === "string" &&
             typeof obj.branchName === "string" &&
             typeof obj.branchAddress === "string" &&
-            typeof obj.ailments === "object" &&
+            typeof obj.ailments === "string" &&
             typeof obj.phoneNumber === "string"
         );
     }

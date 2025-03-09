@@ -88,7 +88,6 @@ export class Medication {
         let currDate = new Date(this.prescriptionDate); // calc all dosage instances between now and when the prescription ends
 
         while (currDate < this.expDate) {
-            console.log(currDate);
             currDate = this.calculateNextDosageDate(this.interval, currDate); // Assign the new date directly
             dates.push(new Date(currDate)); // Push a new Date object to avoid mutating currDate
         }

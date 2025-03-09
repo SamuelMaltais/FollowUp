@@ -15,6 +15,25 @@ import TodayDate from "@/component/TodayDate";
 import { useRouter } from "expo-router";
 import Prescription from "@/app/(prescription)/prescription";
 import NotificationManager from "@/services/notificationService";
+import { UserService } from "@/services/user";
+import { User } from "@/services/schemas/User";
+import { Medication } from "@/services/schemas/Medication";
+import { MedicationService } from "@/services/medicationService";
+import LoadingScreen from "@/component/loading";
+
+async function getMedications(setMedications: Function) {
+  const medications = await MedicationService.getPrescriptions("Jackson");
+  setMedications(medications);
+}
+
+async function fetchUser(name: string, setUser: Function): Promise<void> {
+  try {
+    const user = await UserService.getUser(name);
+    setUser(user);
+  } catch (error) {
+    console.error("Error fetching user:", error);
+  }
+}
 
 // Create a function to load fonts
 const loadFonts = () => {
@@ -29,6 +48,9 @@ const loadFonts = () => {
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
+  const [user, setUser] = useState<User>();
+  const [medications, setMedications] = useState<Medication[]>([]);
+
   const router = useRouter();
 
   const handlePress = () => {
@@ -43,6 +65,8 @@ export default function App() {
     async function prepare() {
       try {
         await loadFonts();
+        await fetchUser("Jane Doe", setUser);
+        await getMedications(setMedications);
         setFontsLoaded(true);
       } catch (e) {
         console.warn(e);
@@ -55,8 +79,8 @@ export default function App() {
   }, []);
 
   // Show loading screen until fonts are loaded
-  if (!fontsLoaded) {
-    return <Text>Loading...</Text>;
+  if (!fontsLoaded || !user || !medications) {
+    return <LoadingScreen />;
   }
 
   return (
@@ -68,14 +92,26 @@ export default function App() {
         {/* Header */}
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Home</Text>
-          <Text style={styles.greeting}>Hello, Jane Doe</Text>
+          <Text style={styles.greeting}>Hello, {user.name}</Text>
 
           <TodayDate date={undefined} />
 
-          <Text style={styles.party}>Happy Women Day !</Text>
+          <Text style={styles.party}>Happy Women's Day !</Text>
         </View>
 
         {/* SCROLL VIEW */}
+
+        {medications.map((med, i) => (
+          <MedicationCard
+            key={i} // Adding a unique key for each item
+            time="11:00 am"
+            medicationName="Potassium K20 in pills"
+            amount="1 pill"
+            imageSource={require("./../../assets/images/comprime2.png")}
+            handlePress={handlePress}
+          />
+        ))}
+
         <MedicationCard
           time="11:00 am"
           medicationName="Potassium K20 in pills"
