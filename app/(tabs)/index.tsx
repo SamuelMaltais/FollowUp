@@ -6,6 +6,7 @@ import * as Font from "expo-font"
 import {MedicationCard} from "@/component/medicationCard";
 import TodayDate from "@/component/TodayDate";
 import {useRouter} from "expo-router";
+import Prescription from "@/app/(prescription)/prescription";
 
 // Create a function to load fonts
 const loadFonts = () => {
@@ -23,8 +24,9 @@ export default function App() {
   const router = useRouter();
 
   const handlePress = () => {
+
     router.push({
-      pathname: "/presription",
+      pathname: "/(prescription)/prescription",
       params: {
       },
     });

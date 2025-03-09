@@ -7,10 +7,23 @@ import {
     Image,
 } from 'react-native';
 import {colors} from "@/component/colors";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import {useRouter} from "expo-router";
 
 export const Prescription = () => {
+    const router = useRouter();
     return (
         <SafeAreaView style={styles.container}>
+
+            <Ionicons
+                name={"chevron-back-outline"}
+                color={colors.space_cadet}
+                size={30}
+                onPress={() => {
+                    router.back();
+                }}
+                style={{marginLeft : 20}}
+            />
 
             <View style={styles.prescriptionContainer}>
                 <Text style={styles.prescriptionTitle}>My Prescription</Text>
@@ -22,7 +35,7 @@ export const Prescription = () => {
                     <View style={styles.medicationHeader}>
                         <Text style={styles.medicationName}>Potassium K20</Text>
                         <Image
-                            source={require("./../../assets/images/comprime2.png")}
+                            source={require("../../assets/images/comprime.png")}
                             style={styles.pillImage}
                         />
                     </View>
@@ -87,16 +100,16 @@ const styles = StyleSheet.create({
         padding : 20,
     },
     prescriptionTitle: {
-        fontSize: 32,
+        fontSize: 28,
         fontWeight: '600',
         color: '#3a3a5a',
-        marginBottom: 15,
-        fontFamily: 'Antic',
+        marginVertical: 25,
+        fontFamily: 'DomineRegular',
 
     },
     prescriptionTime: {
         fontSize: 24,
-        marginBottom: 30,
+        marginBottom: 10,
         fontFamily: 'Antic',
     },
     card: {
