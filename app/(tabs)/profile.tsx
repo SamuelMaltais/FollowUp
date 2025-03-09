@@ -15,6 +15,7 @@ import "react-native-get-random-values";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import TableExample from "@/component/table";
 import { useUserStore } from "@/services/useUserStore";
+import NotificationManager from "@/services/notificationService";
 
 async function fetchUser(name: string, setUser: Function): Promise<void> {
   try {
@@ -39,15 +40,11 @@ export default function Profile() {
   return (
     <SafeAreaView style={styles.container}>
       {/*<Text style={styles.text}>Profile</Text>*/}
-      <UserName name={user?.name} ailments={user?.ailments} />
+      <UserName />
     </SafeAreaView>
   );
 }
 
-type UserNameProp = {
-  name: string;
-  ailments: string;
-};
 
 interface WordListProps {
   words: string;
@@ -105,7 +102,24 @@ const OpenURLButton = ({ url, text }: OpenURLButtonProps) => {
   );
 };
 
-const UserName = (props: UserNameProp) => {
+const UserName = () => {
+  const [user, setUser] = useState<User>();
+
+  const username = useUserStore((state) => state.name);
+
+  useEffect(() => {
+    async function prepare() {
+      try {
+        await fetchUser(username, setUser);
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+    prepare();
+  }, []);
+
+
+  console.log(user)
   return (
     <ScrollView style={{ padding: 10 }}>
       <View style={styles.imageProfileContainer}>
@@ -118,13 +132,13 @@ const UserName = (props: UserNameProp) => {
         <Text style={styles.headerTitle}>Profile</Text>
       </View>
 
-      <Text style={styles.header}>{props.name}</Text>
+      <Text style={styles.header}>{user?.name}</Text>
 
       <View style={styles.profileInfo}>
         <View style={styles.profileDetails}>
           <View style={styles.profileText}>
             <Text style={styles.subtitle}>Age: </Text>
-            <Text style={styles.text}>20</Text>
+            <Text style={styles.text}>{user?.age}</Text>
           </View>
           <View style={styles.profileText}>
             <Text style={styles.subtitle}>Sex: </Text>
@@ -139,7 +153,7 @@ const UserName = (props: UserNameProp) => {
             />
 
             <Text style={styles.subtitle}>Address: </Text>
-            <Text style={[styles.text, styles.underline]}>123 ascdfwfdd</Text>
+            <Text style={[styles.text, styles.underline]}>123 rue Edouard Monpetit</Text>
             {/*TODO: CLICKABLE! */}
           </View>
 
@@ -151,8 +165,8 @@ const UserName = (props: UserNameProp) => {
             />
             <Text style={styles.subtitle}>Phone Number: </Text>
             <Text style={[styles.text, styles.underline]}>
-              514-xxx-xxxx
-            </Text> 
+              514-232-1414
+            </Text>
             {/*TODO: CLICKABLE! */}
           </View>
 
@@ -163,9 +177,9 @@ const UserName = (props: UserNameProp) => {
               style={{ paddingRight: 10 }}
             />
             <Text style={[styles.subtitle, { color: "red" }]}>
-              Emergency :  
+              Emergency :
             </Text>
-            <Text style={[styles.text, styles.underline]}>514-xxx-xxxx</Text> 
+            <Text style={[styles.text, styles.underline]}>514-777-8888</Text>
             {/*TODO: CLICKABLE! */}
           </View>
         </View>
@@ -176,7 +190,7 @@ const UserName = (props: UserNameProp) => {
         <Text style={styles.header2}>Health information</Text>
         <View style={styles.profileText}>
           <Text style={styles.subtitle}>Conditions: </Text>
-          <WordList words={props.ailments} center={false} />
+          <WordList words={user?.ailments} center={false} />
         </View>
         <View style={styles.profileText}>
           <Text style={styles.subtitle}>Blood type: </Text>
@@ -216,12 +230,12 @@ const UserName = (props: UserNameProp) => {
           <Text style={styles.subtitle}>Address: </Text>
           <OpenURLButton
             url={supportedURL}
-            text={"4999 Chemin Queen Mary Arr"}
+            text={"4999 Chemin Queen Mary"}
           />
         </View>
         <View style={styles.profileText}>
           <Text style={styles.subtitle}>Phone Number: </Text>
-          <Text style={[styles.text, styles.underline]}>514-xxx-xxxx</Text>
+          <Text style={[styles.text, styles.underline]}>514-737-5454</Text>
         </View>
       </View>
     </ScrollView>
