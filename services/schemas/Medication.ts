@@ -23,7 +23,8 @@ export class Medication {
     lastTakenDate: Date;
     allDosages : Date[] = [];
     hasTaken: boolean;
-    constructor(uuid: string, patientName: string, medicationName: string, consumptionDetails: string, prescriptionDate: string, expDate: string, interval: string, amount: number, dosage: number, lastTakenDate: string, hasTaken: boolean) {
+    img_url: string;
+    constructor(uuid: string, patientName: string, medicationName: string, consumptionDetails: string, prescriptionDate: string, expDate: string, interval: string, amount: number, dosage: number, lastTakenDate: string, hasTaken: boolean, img_url: string) {
         this.uuid = uuid;
         this.patientName = patientName;
         this.medicationName = medicationName;
@@ -35,6 +36,7 @@ export class Medication {
         this.dosage = dosage;
         this.lastTakenDate = validateDate(lastTakenDate);
         this.hasTaken = hasTaken;
+        this.img_url = img_url
     }
 
     static validate(obj: any) {
@@ -50,7 +52,8 @@ export class Medication {
             typeof obj.amount === "number" &&
             typeof obj.dosage === "number" &&
             typeof obj.lastTakenDate === "string" &&
-            typeof obj.hasTaken === "boolean"
+            typeof obj.hasTaken === "boolean" &&
+            typeof obj.img_url === "string"
         ) {
             return true;
         }
@@ -72,7 +75,8 @@ export class Medication {
             obj.amount,
             obj.dosage,
             obj.lastTakenDate,
-            obj.hasTaken
+            obj.hasTaken,
+            obj.img_url
         );
     }
 

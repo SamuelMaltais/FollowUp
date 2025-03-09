@@ -37,7 +37,12 @@ async function fetchUser(name: string, setUser: Function): Promise<void> {
 }
 
 const formatTimeToday = (date: Date): string => {
-  return date.toLocaleString("en-US", { hour: "numeric", hour12: true });
+  const formattedTime = date.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+  return formattedTime.toLocaleLowerCase();
 };
 
 // Create a function to load fonts
@@ -105,19 +110,23 @@ export default function App() {
 
         {/* SCROLL VIEW */}
 
-        {medications.map((med, i) => (
-          <MedicationCard
-            key={i} // Adding a unique key for each item
-            time={formatTimeToday(
-              med.calculateNextDosageDate(med.interval, med.lastTakenDate)
-            )}
-            medicationName={med.medicationName}
-            amount={`${med.amount} mg`}
-            imageSource={require("./../../assets/images/comprime2.png")}
-            handlePress={handlePress}
-            medication={med}
-          />
-        ))}
+        {medications
+          .sort((a, b) => (a.hasTaken === b.hasTaken ? 0 : a.hasTaken ? 1 : -1)) // Sort medications by `hasTaken`
+          .map((med, i) => (
+            <MedicationCard
+              key={i} // Adding a unique key for each item
+              time={formatTimeToday(
+                med.calculateNextDosageDate(med.interval, med.lastTakenDate)
+              )}
+              medicationName={med.medicationName}
+              amount={
+                med.amount > 1 ? `${med.amount} pills` : `${med.amount} pill`
+              }
+              imageSource={med.img_url}
+              handlePress={handlePress}
+              medication={med}
+            />
+          ))}
 
         <MedicationCard
           time="11:00 am"
