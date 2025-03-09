@@ -34,7 +34,8 @@ export class User {
 
     static fromObject(obj: any) {
         if (!User.validate(obj)) {
-            throw new Error("Invalid user object format.");
+            // throw new Error("Invalid user object format.");
+            return null;
         }
         return new User(
             obj.name,

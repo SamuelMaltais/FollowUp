@@ -28,25 +28,21 @@ export default function Login() {
   const handleLogin = () => {
     setUser(phoneNumber);
 
-    if (!phoneNumber && !password ) {
+    if (!phoneNumber && !password) {
       Alert.alert("Please, enter your phone number and password!");
     } else {
       router.push({
         pathname: "/(tabs)",
-        params: {
-
-        },
+        params: {},
       });
     }
-
   };
 
-  useEffect(() => {
-    new NotificationManager();
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <SafeAreaProvider style={styles.safeAreaProvider}>
+      <NotificationManager />
       <SafeAreaView style={styles.container}>
         <View style={styles.inputContainer}>
           <Text style={styles.title}>LOG IN</Text>

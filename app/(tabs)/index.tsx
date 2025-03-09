@@ -78,7 +78,6 @@ export default function App() {
         await loadFonts();
         await fetchUser(username, setUser);
         await getMedications(setMedications, username);
-        new NotificationManager();
         setFontsLoaded(true);
       } catch (e) {
         console.warn(e);
@@ -102,7 +101,7 @@ export default function App() {
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Home</Text>
           <Text style={styles.greeting}>Hello, {user.name}</Text>
-          <View style={{alignItems: "center"} }>
+          <View style={{ alignItems: "center" }}>
             <TodayDate date={undefined} />
           </View>
 

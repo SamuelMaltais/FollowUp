@@ -4,10 +4,12 @@ import {
   StyleSheet,
   SafeAreaView,
   Animated,
-  Image, Linking, Alert, TouchableOpacity,
+  Image,
+  Linking,
+  Alert,
+  TouchableOpacity,
 } from "react-native";
 import { colors } from "@/component/colors";
-import ScrollView = Animated.ScrollView;
 import React, { useCallback, useEffect, useState } from "react";
 import { User } from "@/services/schemas/User";
 import { UserService } from "@/services/user";
@@ -15,7 +17,8 @@ import "react-native-get-random-values";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import TableExample from "@/component/table";
 import { useUserStore } from "@/services/useUserStore";
-import NotificationManager from "@/services/notificationService";
+// Removed unused NotificationManager
+const { ScrollView } = Animated;
 
 async function fetchUser(name: string, setUser: Function): Promise<void> {
   try {
@@ -28,23 +31,22 @@ async function fetchUser(name: string, setUser: Function): Promise<void> {
 }
 
 export default function Profile() {
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User | null>(null);
   const username = useUserStore((state) => state.name);
+
   useEffect(() => {
     fetchUser(username, setUser);
-  }, []);
+  }, [username]);
 
   if (!user) {
     return <Text>Loading...</Text>;
   }
   return (
     <SafeAreaView style={styles.container}>
-      {/*<Text style={styles.text}>Profile</Text>*/}
-      <UserName />
+      <UserName user={user} />
     </SafeAreaView>
   );
 }
-
 
 interface WordListProps {
   words: string;
@@ -54,14 +56,7 @@ interface WordListProps {
 const WordList: React.FC<WordListProps> = ({ words, center }) => {
   if (center) {
     return (
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+      <View style={styles.centeredContainer}>
         <Text style={styles.text}>{words}</Text>
       </View>
     );
@@ -81,14 +76,10 @@ type OpenURLButtonProps = {
   text: string;
 };
 
-const OpenURLButton = ({ url, text }: OpenURLButtonProps) => {
+const OpenURLButton: React.FC<OpenURLButtonProps> = ({ url, text }) => {
   const handlePress = useCallback(async () => {
-    // Checking if the link is supported for links with custom URL scheme.
     const supported = await Linking.canOpenURL(url);
-
     if (supported) {
-      // Opening the link with some app, if the URL scheme is "http" the web link should be opened
-      // by some browser in the mobile
       await Linking.openURL(url);
     } else {
       Alert.alert(`Don't know how to open this URL: ${url}`);
@@ -102,24 +93,11 @@ const OpenURLButton = ({ url, text }: OpenURLButtonProps) => {
   );
 };
 
-const UserName = () => {
-  const [user, setUser] = useState<User>();
+type UserNameProps = {
+  user: User;
+};
 
-  const username = useUserStore((state) => state.name);
-
-  useEffect(() => {
-    async function prepare() {
-      try {
-        await fetchUser(username, setUser);
-      } catch (e) {
-        console.warn(e);
-      }
-    }
-    prepare();
-  }, []);
-
-
-  console.log(user)
+const UserName: React.FC<UserNameProps> = ({ user }) => {
   return (
     <ScrollView style={{ padding: 10 }}>
       <View style={styles.imageProfileContainer}>
@@ -132,13 +110,13 @@ const UserName = () => {
         <Text style={styles.headerTitle}>Profile</Text>
       </View>
 
-      <Text style={styles.header}>{user?.name}</Text>
+      <Text style={styles.header}>{user.name}</Text>
 
       <View style={styles.profileInfo}>
         <View style={styles.profileDetails}>
           <View style={styles.profileText}>
             <Text style={styles.subtitle}>Age: </Text>
-            <Text style={styles.text}>{user?.age}</Text>
+            <Text style={styles.text}>{user.age}</Text>
           </View>
           <View style={styles.profileText}>
             <Text style={styles.subtitle}>Sex: </Text>
@@ -151,10 +129,10 @@ const UserName = () => {
               size={24}
               style={{ paddingRight: 10 }}
             />
-
             <Text style={styles.subtitle}>Address: </Text>
-            <Text style={[styles.text, styles.underline]}>123 rue Edouard Monpetit</Text>
-            {/*TODO: CLICKABLE! */}
+            <Text style={[styles.text, styles.underline]}>
+              123 rue Edouard Monpetit
+            </Text>
           </View>
 
           <View style={styles.profileText}>
@@ -164,10 +142,7 @@ const UserName = () => {
               style={{ paddingRight: 10 }}
             />
             <Text style={styles.subtitle}>Phone Number: </Text>
-            <Text style={[styles.text, styles.underline]}>
-              514-232-1414
-            </Text>
-            {/*TODO: CLICKABLE! */}
+            <Text style={[styles.text, styles.underline]}>514-232-1414</Text>
           </View>
 
           <View style={styles.profileText}>
@@ -176,21 +151,18 @@ const UserName = () => {
               size={24}
               style={{ paddingRight: 10 }}
             />
-            <Text style={[styles.subtitle, { color: "red" }]}>
-              Emergency :
-            </Text>
+            <Text style={[styles.subtitle, { color: "red" }]}>Emergency :</Text>
             <Text style={[styles.text, styles.underline]}>514-777-8888</Text>
-            {/*TODO: CLICKABLE! */}
           </View>
         </View>
       </View>
 
-      {/*Health information*/}
+      {/* Health information */}
       <View style={{ margin: 20 }}>
         <Text style={styles.header2}>Health information</Text>
         <View style={styles.profileText}>
           <Text style={styles.subtitle}>Conditions: </Text>
-          <WordList words={user?.ailments} center={false} />
+          <WordList words={user.ailments} center={false} />
         </View>
         <View style={styles.profileText}>
           <Text style={styles.subtitle}>Blood type: </Text>
@@ -203,35 +175,23 @@ const UserName = () => {
       </View>
 
       <View style={styles.lineStyle} />
-      {/*Active meds */}
+      {/* Active medications */}
       <View style={{ margin: 20, alignItems: "center" }}>
-        <Text style={[styles.header2]}>Active medications</Text>
-        <TableExample />
+        <Text style={styles.header2}>Active medications</Text>
+        <TableExample namePills={[]} amount={[]} isPast={[]} />
       </View>
 
-      {/*Nearest pharmacy*/}
+      {/* Nearest pharmacy */}
       <View style={{ margin: 20, alignItems: "center" }}>
         <Text style={styles.header2}>Nearest pharmacy</Text>
-        <Text
-          style={{
-            marginBottom: 10,
-            fontFamily: "Gambetta",
-            color: "#A6A4A4",
-            fontSize: 16,
-          }}
-        >
-          Based on current location
-        </Text>
+        <Text style={styles.subheader}>Based on current location</Text>
         <View style={styles.profileText}>
           <Text style={styles.subtitle}>Name: </Text>
           <Text style={styles.text}>Pharmaprix</Text>
         </View>
         <View style={styles.profileText}>
           <Text style={styles.subtitle}>Address: </Text>
-          <OpenURLButton
-            url={supportedURL}
-            text={"4999 Chemin Queen Mary"}
-          />
+          <OpenURLButton url={supportedURL} text={"4999 Chemin Queen Mary"} />
         </View>
         <View style={styles.profileText}>
           <Text style={styles.subtitle}>Phone Number: </Text>
@@ -278,13 +238,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   header2: {
-    fontSize:24,
+    fontSize: 24,
     textAlign: "center",
     fontFamily: "Gambetta",
     color: colors.space_cadet,
     marginBottom: 10,
   },
-  underline: { textDecorationLine: "underline" },
+  underline: {
+    textDecorationLine: "underline",
+  },
   headerBar: {
     backgroundColor: "white",
     alignItems: "center",
@@ -295,26 +257,31 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     fontFamily: "Gambetta",
   },
-
+  centeredContainer: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   imageProfileContainer: {
     alignSelf: "center",
     borderRadius: 50,
-    width: 100, // Largeur ajustée
-    height: 100, // Hauteur ajustée
+    width: 100,
+    height: 100,
     borderColor: "#fff",
-    borderWidth: 1, // Ajout d'une bordure visible
-    shadowColor: "#FFA500", // Couleur de l'ombre (orange foncé)
+    borderWidth: 1,
+    shadowColor: "#FFA500",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.8,
     shadowRadius: 3,
-    elevation: 5, // Pour les ombres sous Android
+    elevation: 5,
     marginVertical: 30,
-    overflow: "hidden", // Pour que l'image respecte les bordures arrondies
+    overflow: "hidden",
   },
   imageProfile: {
-    width: "100%", // L'image s'ajuste à la taille du conteneur
+    width: "100%",
     height: "100%",
-    resizeMode: "cover", // Ajuste l'image en couvrant tout l'espace
+    resizeMode: "cover",
   },
   profileInfo: {
     flexDirection: "row",
@@ -332,5 +299,11 @@ const styles = StyleSheet.create({
   },
   profileDetails: {
     flex: 1,
+  },
+  subheader: {
+    marginBottom: 10,
+    fontFamily: "Gambetta",
+    color: "#A6A4A4",
+    fontSize: 16,
   },
 });
