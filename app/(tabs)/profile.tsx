@@ -9,6 +9,7 @@ import 'react-native-get-random-values';
 async function fetchUser(name: string, setUser: Function): Promise<void> {
     try {
         const user = await UserService.getUser(name);
+        console.log(user);
         setUser(user);
     } catch (error) {
         console.error("Error fetching user:", error);
