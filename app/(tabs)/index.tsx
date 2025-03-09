@@ -76,8 +76,9 @@ export default function App() {
     async function prepare() {
       try {
         await loadFonts();
-        await fetchUser(username, setUser);
+        console.log("LE USERNAME ?? " + username);
         await getMedications(setMedications, username);
+        await fetchUser(username, setUser);
         setFontsLoaded(true);
       } catch (e) {
         console.warn(e);
@@ -88,6 +89,11 @@ export default function App() {
 
   // Show loading screen until fonts are loaded
   if (!fontsLoaded || !user || !medications) {
+    console.log("NOT LOADIGN WHY ??");
+
+    console.log(user);
+    console.log(medications);
+
     return <LoadingScreen />;
   }
 
@@ -119,9 +125,7 @@ export default function App() {
                 med.calculateNextDosageDate(med.interval, med.lastTakenDate)
               )}
               medicationName={med.medicationName}
-              amount={
-                med.amount > 1 ? `${med.amount} pills` : `${med.amount} pill`
-              }
+              amount={med.amount}
               imageSource={med.img_url}
               handlePress={handlePress}
               medication={med}

@@ -20,6 +20,7 @@ export default function NotificationManager() {
   const [notification, setNotification] = useState<
     Notifications.Notification | undefined
   >(undefined);
+  const [notificationScheduled, setNotificationScheduled] = useState(false);
   const notificationListener = useRef<Notifications.EventSubscription>();
   const responseListener = useRef<Notifications.EventSubscription>();
 
@@ -27,7 +28,10 @@ export default function NotificationManager() {
     registerForPushNotificationsAsync()
       .then((token) => token && setExpoPushToken(token))
       .finally(() => {
-        schedulePushNotification();
+        if (!notificationScheduled) {
+          schedulePushNotification();
+          setNotificationScheduled(true);
+        }
       });
 
     if (Platform.OS === "android") {
@@ -52,7 +56,7 @@ export default function NotificationManager() {
       responseListener.current &&
         Notifications.removeNotificationSubscription(responseListener.current);
     };
-  }, []);
+  }, [notificationScheduled]);
 
   return <></>;
 }
@@ -105,11 +109,7 @@ async function registerForPushNotificationsAsync() {
       if (!projectId) {
         throw new Error("Project ID not found");
       }
-      token = (
-        await Notifications.getExpoPushTokenAsync({
-          projectId,
-        })
-      ).data;
+      token = (await Notifications.getExpoPushTokenAsync({ projectId })).data;
       console.log(token);
     } catch (e) {
       token = `${e}`;

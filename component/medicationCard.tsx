@@ -76,7 +76,6 @@ const ArrowIcon = () => {
 };
 
 async function updateMedication(med: Medication) {
-  console.log(med);
   await MedicationService.updateMedication(
     med.uuid,
     med.lastTakenDate.toISOString().split("T")[0]
@@ -93,14 +92,12 @@ export const MedicationCard = ({
   medication,
 }: MedicationCardProps) => {
   const [submitted, setSubmited] = useState<boolean>(medication.hasTaken);
-
-  console.log(submitted);
   return (
     <View style={styles.container}>
       <Text style={styles.timeText}>{time}</Text>
 
       <View style={styles.medicationCard}>
-        <Image source={imageSource} style={styles.medicationImage} />
+        <Image source={{ uri: imageSource }} style={styles.medicationImage} />
         <Text style={styles.medicationName}>{medicationName}</Text>
         <View style={styles.amountContainer}>
           <Text style={styles.amountLabel}>Amount : </Text>
@@ -111,13 +108,11 @@ export const MedicationCard = ({
           disabled={submitted || medication.hasTaken}
           disabledRailBackgroundColor="white"
           disabledThumbIconBackgroundColor="white"
-          disabledThumbIconBorderColor= "white"
-        //disable the button by doing true (Optional)
+          disabledThumbIconBorderColor="white"
+          //disable the button by doing true (Optional)
           swipeSuccessThreshold={70}
           width={Dimensions.get("window").width - 120}
-          title={
-            submitted ? "Taken!" : "Confirm taken >>"
-          }
+          title={submitted ? "Taken!" : "Confirm taken >>"}
           titleFontSize={16}
           titleColor={submitted ? "black" : "#666"}
           thumbIconComponent={submitted ? CheckMarkIcon : ArrowIcon}
@@ -132,12 +127,8 @@ export const MedicationCard = ({
           //After the completion of swipe (Optional)
           railFillBackgroundColor="#fff" //(Optional)
           railFillBorderColor={submitted ? colors.space_cadet : colors.lavender} //(Optional)
-          thumbIconBackgroundColor={
-            submitted ? "red" : colors.lavender
-          } //(Optional)
-          thumbIconBorderColor={
-            submitted ? "red" : colors.lavender
-          }//(Optional)
+          thumbIconBackgroundColor={submitted ? "red" : colors.lavender} //(Optional)
+          thumbIconBorderColor={submitted ? "red" : colors.lavender} //(Optional)
           railBackgroundColor={submitted ? "#fff" : "#fff"}
           railBorderColor={submitted ? colors.space_cadet : colors.lavender} //(Optional)
         />

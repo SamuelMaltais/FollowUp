@@ -18,13 +18,13 @@ export class Medication {
     medicationName: string;
     consumptionDetails: string;
     interval: string;
-    amount: number;
-    dosage: number;
+    amount: string;
+    dosage: string;
     lastTakenDate: Date;
     allDosages : Date[] = [];
     hasTaken: boolean;
     img_url: string;
-    constructor(uuid: string, patientName: string, medicationName: string, consumptionDetails: string, prescriptionDate: string, expDate: string, interval: string, amount: number, dosage: number, lastTakenDate: string, hasTaken: boolean, img_url: string) {
+    constructor(uuid: string, patientName: string, medicationName: string, consumptionDetails: string, prescriptionDate: string, expDate: string, interval: string, amount: string, dosage: string, lastTakenDate: string, hasTaken: boolean, img_url: string) {
         this.uuid = uuid;
         this.patientName = patientName;
         this.medicationName = medicationName;
@@ -49,8 +49,8 @@ export class Medication {
             typeof obj.prescriptionDate === "string" &&
             typeof obj.expDate === "string" &&
             typeof obj.interval === "string" &&
-            typeof obj.amount === "number" &&
-            typeof obj.dosage === "number" &&
+            typeof obj.amount === "string" &&
+            typeof obj.dosage === "string" &&
             typeof obj.lastTakenDate === "string" &&
             typeof obj.hasTaken === "boolean" &&
             typeof obj.img_url === "string"
@@ -64,7 +64,7 @@ export class Medication {
         if (!Medication.validate(obj)) {
             throw new Error("Invalid medication object format.");
         }
-        return new Medication(
+        var med = new Medication(
             obj.uuid,
             obj.patientName,
             obj.medicationName,
@@ -78,6 +78,8 @@ export class Medication {
             obj.hasTaken,
             obj.img_url
         );
+        console.log(med)
+        return med
     }
 
     calculateNextDosageDate(interval: string, lastDate: Date): Date {
@@ -100,7 +102,6 @@ export class Medication {
             currDate = this.calculateNextDosageDate(this.interval, currDate); // Assign the new date directly
             dates.push(new Date(currDate)); // Push a new Date object to avoid mutating currDate
         }
-        console.log(dates);
         this.allDosages = dates;
     }
 }

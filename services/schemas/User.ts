@@ -8,8 +8,8 @@ export class User {
     phoneNumber: string;
     ailments: string;
     uuid: any;
-    constructor(name: string, branchName: string, branchAddress: string, ailments: string, phoneNumber: string, age : string) {
-        this.uuid = uuidv4();
+    constructor(uuid: string, name: string, branchName: string, branchAddress: string, ailments: string, phoneNumber: string, age : string) {
+        this.uuid = uuid;
         this.name = name;
         this.age = age;
         this.branchName = branchName;
@@ -19,7 +19,6 @@ export class User {
     }
 
     static validate(obj: any) {
-        console.log(obj);
         return (
             obj &&
             typeof obj.uuid === "string" &&
@@ -35,9 +34,19 @@ export class User {
     static fromObject(obj: any) {
         if (!User.validate(obj)) {
             // throw new Error("Invalid user object format.");
+            console.log(obj);
+            console.log(typeof obj.uuid === "string");
+            console.log(typeof obj.name === "string");
+            console.log(typeof obj.age === "string");
+            console.log(typeof obj.branchAddress === "string");
+            console.log(typeof obj.ailments === "string");
+            console.log(typeof obj.phoneNumber === "string");
+
+
             return null;
         }
         return new User(
+            obj.uuid,
             obj.name,
             obj.age,
             obj.branchName,

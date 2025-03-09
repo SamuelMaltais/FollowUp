@@ -38,8 +38,6 @@ export default function Login() {
     }
   };
 
-  useEffect(() => {}, []);
-
   return (
     <SafeAreaProvider style={styles.safeAreaProvider}>
       <NotificationManager />
@@ -76,13 +74,7 @@ export default function Login() {
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.bottomContainer}>
-          <View style={styles.separator} />
-          <Text style={styles.noAccountText}>Don't have an account?</Text>
-          <TouchableOpacity style={styles.signUpButton}>
-            <Text style={styles.signUpButtonText}>Sign Up</Text>
-          </TouchableOpacity>
-        </View>
+
         {loading && <ActivityIndicator size="large" color="#0000ff" />}
       </SafeAreaView>
     </SafeAreaProvider>
