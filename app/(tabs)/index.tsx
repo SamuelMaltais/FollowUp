@@ -35,6 +35,10 @@ async function fetchUser(name: string, setUser: Function): Promise<void> {
   }
 }
 
+const formatTimeToday = (date: Date): string => {
+  return date.toLocaleString("en-US", { hour: "numeric", hour12: true });
+};
+
 // Create a function to load fonts
 const loadFonts = () => {
   return Font.loadAsync({
@@ -91,7 +95,7 @@ export default function App() {
           <Text style={styles.headerTitle}>Home</Text>
           <Text style={styles.greeting}>Hello, {user.name}</Text>
 
-          <TodayDate />
+          <TodayDate date={undefined} />
 
           <Text style={styles.party}>Happy Women's Day !</Text>
         </View>
@@ -101,11 +105,14 @@ export default function App() {
         {medications.map((med, i) => (
           <MedicationCard
             key={i} // Adding a unique key for each item
-            time="11:00 am"
-            medicationName="Potassium K20 in pills"
-            amount="1 pill"
+            time={formatTimeToday(
+              med.calculateNextDosageDate(med.interval, med.lastTakenDate)
+            )}
+            medicationName={med.medicationName}
+            amount={`${med.amount} mg`}
             imageSource={require("./../../assets/images/comprime2.png")}
             handlePress={handlePress}
+            medication={med}
           />
         ))}
 
@@ -115,6 +122,7 @@ export default function App() {
           amount="1 pill"
           imageSource={require("./../../assets/images/comprime2.png")}
           handlePress={handlePress}
+          medication={medications[0]}
         />
 
         <MedicationCard
@@ -123,6 +131,7 @@ export default function App() {
           amount="2 tablets"
           imageSource={require("./../../assets/images/comprime.png")}
           handlePress={handlePress}
+          medication={medications[0]}
         />
       </ScrollView>
     </SafeAreaView>
