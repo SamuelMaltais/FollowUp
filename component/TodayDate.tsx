@@ -17,13 +17,14 @@ export default function TodayDate(props: { date: string | undefined }) {
 
 const styles = StyleSheet.create({
   dateText: {
-    backgroundColor: colors.peach_yellow,
-    color: "white",
+    backgroundColor: colors.lavender,
+    color: colors.space_cadet,
     fontFamily: "DomineBold",
     fontSize: 20,
     paddingHorizontal: 40,
     paddingVertical: 15,
     width: "100%",
     borderRadius: 20,
+    marginVertical: 10,
   },
 });

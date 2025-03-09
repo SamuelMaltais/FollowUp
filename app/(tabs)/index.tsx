@@ -60,7 +60,7 @@ export default function App() {
 
             <TodayDate />
 
-            <Text style={styles.party}>Happy Women Day !</Text>
+            <Text style={styles.party}>Happy Women's Day !</Text>
           </View>
 
           {/* SCROLL VIEW */}
