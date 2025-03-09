@@ -10,6 +10,7 @@ interface MedicationCardProps {
     amount: string
     imageSource: any
     confirmed?: boolean
+    handlePress?: () => void
 }
 
 const CheckMarkIcon = () => {
@@ -32,7 +33,7 @@ const CheckMarkIcon = () => {
 };
 
 
-export const MedicationCard = ({ time, medicationName, amount, imageSource, confirmed = false }: MedicationCardProps) => {
+export const MedicationCard = ({ time, medicationName, amount, imageSource, confirmed = false, handlePress }: MedicationCardProps) => {
 
 
     return (
@@ -75,7 +76,7 @@ export const MedicationCard = ({ time, medicationName, amount, imageSource, conf
 
 
 
-                <TouchableOpacity style={styles.prescriptionButton}>
+                <TouchableOpacity style={styles.prescriptionButton} onPress={handlePress}>
                     <Text style={styles.prescriptionButtonText}>See my prescription</Text>
                 </TouchableOpacity>
             </View>
