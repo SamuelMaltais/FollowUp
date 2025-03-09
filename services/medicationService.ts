@@ -1,7 +1,7 @@
 import { Medication } from "./schemas/Medication";
 import { User } from "./schemas/User";
 
-const backendAdress = "localhost"
+const backendAdress = "b75b-132-204-243-250.ngrok-free.app"
 const backendPort = 3000
 
 
@@ -21,11 +21,12 @@ interface UpdateMedicationError {
 export class MedicationService {
     static async getPrescriptions(name: string){
         console.log("WDAWEAE")
-        var res = await fetch(`http://${backendAdress}:${backendPort}/data/prescriptions?name=${name}`, {
+        var res = await fetch(`https://${backendAdress}/data/prescriptions?name=${name}`, {
             method: "GET",
-            headers: {
+            headers: new Headers({
+              "ngrok-skip-browser-warning": "69420",
               "Content-type": "application/json; charset=UTF-8"
-            }
+            }),
           });
 
         var obj : any = await res.json()
@@ -43,7 +44,7 @@ export class MedicationService {
   static updateMedication = async (uuid: string, newDate: string): Promise<void> => {
   
     try {
-      const response = await fetch(`http://${backendAdress}:${backendPort}/data/prescriptions`, {
+      const response = await fetch(`https://${backendAdress}:${backendPort}/data/prescriptions`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

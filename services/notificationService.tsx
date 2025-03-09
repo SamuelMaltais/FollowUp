@@ -65,7 +65,7 @@ export default class NotificationManager {
         },
         trigger: {
           type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
-          seconds: 4, // Trigger after 2 seconds.
+          seconds: 4,
         },
       });
       console.log("Notification scheduled.");
