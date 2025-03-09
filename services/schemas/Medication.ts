@@ -22,8 +22,9 @@ export class Medication {
     dosage: number;
     lastTakenDate: Date;
     allDosages : Date[] = [];
-    constructor(patientName: string, medicationName: string, consumptionDetails: string, prescriptionDate: string, expDate: string, interval: string, amount: number, dosage: number, lastTakenDate: string) {
-        this.uuid = uuidv4();
+    hasTaken: boolean;
+    constructor(uuid: string, patientName: string, medicationName: string, consumptionDetails: string, prescriptionDate: string, expDate: string, interval: string, amount: number, dosage: number, lastTakenDate: string, hasTaken: boolean) {
+        this.uuid = uuid;
         this.patientName = patientName;
         this.medicationName = medicationName;
         this.consumptionDetails = consumptionDetails;
@@ -33,6 +34,7 @@ export class Medication {
         this.amount = amount;
         this.dosage = dosage;
         this.lastTakenDate = validateDate(lastTakenDate);
+        this.hasTaken = hasTaken;
     }
 
     static validate(obj: any) {
@@ -47,7 +49,8 @@ export class Medication {
             typeof obj.interval === "string" &&
             typeof obj.amount === "number" &&
             typeof obj.dosage === "number" &&
-            typeof obj.lastTakenDate === "string"
+            typeof obj.lastTakenDate === "string" &&
+            typeof obj.hasTaken === "boolean"
         ) {
             return true;
         }
@@ -59,6 +62,7 @@ export class Medication {
             throw new Error("Invalid medication object format.");
         }
         return new Medication(
+            obj.uuid,
             obj.patientName,
             obj.medicationName,
             obj.consumptionDetails,
@@ -67,7 +71,8 @@ export class Medication {
             obj.interval,
             obj.amount,
             obj.dosage,
-            obj.lastTakenDate
+            obj.lastTakenDate,
+            obj.hasTaken
         );
     }
 
