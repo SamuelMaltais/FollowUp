@@ -73,6 +73,7 @@ export default function App() {
         await loadFonts();
         await fetchUser(username, setUser);
         await getMedications(setMedications, username);
+        new NotificationManager();
         setFontsLoaded(true);
       } catch (e) {
         console.warn(e);
