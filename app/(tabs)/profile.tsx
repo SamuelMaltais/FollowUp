@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { colors } from "@/component/colors";
 import ScrollView = Animated.ScrollView;
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { User } from "@/services/schemas/User";
 import { UserService } from "@/services/user";
 import "react-native-get-random-values";
@@ -76,6 +76,34 @@ const WordList: React.FC<WordListProps> = ({ words, center }) => {
       </View>
     );
   }
+};
+
+const supportedURL = "https://maps.app.goo.gl/1ceodaCrVgR2X7BG9";
+
+type OpenURLButtonProps = {
+  url: string;
+  text: string;
+};
+
+const OpenURLButton = ({ url, text }: OpenURLButtonProps) => {
+  const handlePress = useCallback(async () => {
+    // Checking if the link is supported for links with custom URL scheme.
+    const supported = await Linking.canOpenURL(url);
+
+    if (supported) {
+      // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+      // by some browser in the mobile
+      await Linking.openURL(url);
+    } else {
+      Alert.alert(`Don't know how to open this URL: ${url}`);
+    }
+  }, [url]);
+
+  return (
+    <TouchableOpacity onPress={handlePress}>
+      <Text style={[styles.text, styles.underline]}>{text}</Text>
+    </TouchableOpacity>
+  );
 };
 
 const UserName = (props: UserNameProp) => {
@@ -187,7 +215,10 @@ const UserName = (props: UserNameProp) => {
         </View>
         <View style={styles.profileText}>
           <Text style={styles.subtitle}>Address: </Text>
-          <Text style={[styles.text, styles.underline]}>123 abc</Text>
+          <OpenURLButton
+            url={supportedURL}
+            text={"4999 Chemin Queen Mary Arr"}
+          />
         </View>
         <View style={styles.profileText}>
           <Text style={styles.subtitle}>Phone Number: </Text>
@@ -207,7 +238,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "#000",
-    fontSize: 20,
+    fontSize: 18,
     fontFamily: "Antic",
   },
   subtitle: {
