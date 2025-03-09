@@ -27,10 +27,17 @@ export default function Login() {
   const handleLogin = () => {
     setUser(phoneNumber);
 
-    router.push({
-      pathname: "/(tabs)",
-      params: {},
-    });
+    if (!phoneNumber && !password ) {
+      Alert.alert("Please, enter your phone number and password!");
+    } else {
+      router.push({
+        pathname: "/(tabs)",
+        params: {
+
+        },
+      });
+    }
+
   };
 
   return (

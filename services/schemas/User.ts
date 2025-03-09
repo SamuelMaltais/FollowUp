@@ -17,6 +17,7 @@ export class User {
     }
 
     static validate(obj: any) {
+        console.log(obj);
         return (
             obj &&
             typeof obj.uuid === "string" &&

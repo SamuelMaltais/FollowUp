@@ -4,7 +4,7 @@ import {
   StyleSheet,
   SafeAreaView,
   Animated,
-  Image,
+  Image, Linking, Alert, TouchableOpacity,
 } from "react-native";
 import { colors } from "@/component/colors";
 import ScrollView = Animated.ScrollView;
@@ -29,7 +29,6 @@ async function fetchUser(name: string, setUser: Function): Promise<void> {
 export default function Profile() {
   const [user, setUser] = useState<User>();
   const username = useUserStore((state) => state.name);
-
   useEffect(() => {
     fetchUser(username, setUser);
   }, []);
@@ -153,7 +152,7 @@ const UserName = (props: UserNameProp) => {
             <Text style={styles.subtitle}>Phone Number: </Text>
             <Text style={[styles.text, styles.underline]}>
               514-xxx-xxxx
-            </Text>{" "}
+            </Text> 
             {/*TODO: CLICKABLE! */}
           </View>
 
@@ -164,9 +163,9 @@ const UserName = (props: UserNameProp) => {
               style={{ paddingRight: 10 }}
             />
             <Text style={[styles.subtitle, { color: "red" }]}>
-              Emergency :{" "}
+              Emergency :  
             </Text>
-            <Text style={[styles.text, styles.underline]}>514-xxx-xxxx</Text>{" "}
+            <Text style={[styles.text, styles.underline]}>514-xxx-xxxx</Text> 
             {/*TODO: CLICKABLE! */}
           </View>
         </View>
