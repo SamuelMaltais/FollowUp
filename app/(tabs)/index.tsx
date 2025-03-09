@@ -73,9 +73,6 @@ export default function App() {
       }
     }
     prepare();
-
-    // We need to make these into real prescriptions
-    var notif = new NotificationManager();
   }, []);
 
   // Show loading screen until fonts are loaded
@@ -94,7 +91,7 @@ export default function App() {
           <Text style={styles.headerTitle}>Home</Text>
           <Text style={styles.greeting}>Hello, {user.name}</Text>
 
-          <TodayDate date={undefined} />
+          <TodayDate />
 
           <Text style={styles.party}>Happy Women's Day !</Text>
         </View>
