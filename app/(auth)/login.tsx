@@ -55,7 +55,7 @@ export default function Login() {
             Enter your full name to be authenticated
           </Text>
 
-          <Text style={styles.text}>Fullname :</Text>
+          <Text style={styles.text}>Full Name :</Text>
           <TextInput
             style={styles.input}
             onChangeText={setPhoneNumber}

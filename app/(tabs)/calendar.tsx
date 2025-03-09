@@ -1,45 +1,50 @@
-import { Text, View, StyleSheet } from "react-native";
-import React, { useEffect, useState } from "react";
-import { Calendar, LocaleConfig } from "react-native-calendars";
-import { UserService } from "@/services/user";
-import { MedicationService } from "@/services/medicationService";
-import { Medication } from "@/services/schemas/Medication";
-import { colors } from "@/component/colors";
-import TodayDate from "@/component/TodayDate";
-import { useUserStore } from "@/services/useUserStore";
+"use client"
+
+import {Text, View, StyleSheet, ScrollView} from "react-native"
+import { useEffect, useState } from "react"
+import { Calendar } from "react-native-calendars"
+import { MedicationService } from "@/services/medicationService"
+import type { Medication } from "@/services/schemas/Medication"
+import { colors } from "@/component/colors"
+import { useUserStore } from "@/services/useUserStore"
+import TableExample from "@/component/table";
 
 const formatDate = (dateString: string) => {
-  const date = new Date(dateString + "T00:00:00"); // Ensure it starts at midnight local time
+  const date = new Date(dateString + "T00:00:00") // Ensure it starts at midnight local time
   const options: Intl.DateTimeFormatOptions = {
     day: "numeric",
     month: "long",
     year: "numeric",
-  };
-  return date.toLocaleDateString("en-US", options);
-};
+  }
+  return date.toLocaleDateString("en-US", options)
+}
 
 async function getMedications(setMedications: Function, name: string) {
-  const medications = await MedicationService.getPrescriptions(name);
-  setMedications(medications);
+  const medications = await MedicationService.getPrescriptions(name)
+  setMedications(medications)
 }
 
 export default function CalendarView() {
-  const [selected, setSelected] = useState("");
-  const username = useUserStore((state) => state.name);
-  const [medications, setMedications] = useState<Medication[]>([]);
+  const [selected, setSelected] = useState("")
+  const username = useUserStore((state) => state.name)
+  const [medications, setMedications] = useState<Medication[]>([])
 
   useEffect(() => {
-    getMedications(setMedications, username);
-  }, []);
+    getMedications(setMedications, username)
+  }, [])
 
   const filteredMedications = medications.filter((med) =>
-    //med.lastTakenDate.toISOString().split("T")[0] === selected
-    med.allDosages
-      .map((date) => date.toISOString().split("T")[0])
-      .includes(selected)
-  );
+      //med.lastTakenDate.toISOString().split("T")[0] === selected
+      med.allDosages
+          .map((date) => date.toISOString().split("T")[0])
+          .includes(selected),
+  )
 
-  console.log(filteredMedications);
+  const today = new Date();
+  const  selectedDate  =   new   Date ( selected ) ;
+  const  isPast  =  selectedDate  <  today ;
+
+  console.log(filteredMedications)
 
   // var markedDates: any = {};
   // medications.forEach((med) => {
@@ -57,59 +62,54 @@ export default function CalendarView() {
   //   selectedDotColor: "red",
   // };
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Calendar</Text>
-      </View>
-      <Calendar
-        onDayPress={(day: any) => {
-          setSelected(day.dateString);
-        }}
-        initialDate={selected}
-        style={styles.calendar}
-        theme={{
-          backgroundColor: "#ffffff",
-          calendarBackground: "#ffffff",
-          textSectionTitleColor: colors.space_cadet,
-          selectedDayBackgroundColor: colors.space_cadet,
-          selectedDayTextColor: colors.lavender,
-          todayTextColor: colors.orange,
-          dayTextColor: "#2d4150",
-          textDisabledColor: colors.peach_yellow,
-        }}
-        markedDates={{
-          // dont have any selected (???)
-          [selected]: {
-            selected: true,
-            disableTouchEvent: true,
-            selectedDotColor: "orange",
-          },
-        }}
-      />
+      <View style={styles.container}>
+        <ScrollView>
+        <View style={styles.header}>
+          <Text style={styles.headerTitle}>Calendar</Text>
+        </View>
+        <Calendar
+            onDayPress={(day: any) => {
+              setSelected(day.dateString)
+            }}
+            initialDate={selected}
+            style={styles.calendar}
+            theme={{
+              backgroundColor: "#ffffff",
+              calendarBackground: "#ffffff",
+              textSectionTitleColor: colors.space_cadet,
+              selectedDayBackgroundColor: colors.space_cadet,
+              selectedDayTextColor: colors.lavender,
+              todayTextColor: colors.orange,
+              dayTextColor: "#2d4150",
+              textDisabledColor: colors.peach_yellow,
+            }}
+            markedDates={{
+              // dont have any selected (???)
+              [selected]: {
+                selected: true,
+                disableTouchEvent: true,
+                selectedDotColor: "orange",
+              },
+            }}
+        />
 
-      <View style={styles.flexColumn}>
-        <Text style={styles.dateText}>
-          {selected ? formatDate(selected) : "No date selected"}
-        </Text>
-        {filteredMedications.length > 0 ? (
-          filteredMedications.map((med, index) => {
-            const today = new Date();
-            const selectedDate = new Date(selected);
-            const isPast = selectedDate < today;
-            return (
-              <Text key={index} style={styles.medText}>
-                {isPast
-                  ? `You have taken ${med.medicationName} ${med.dosage} mg ✅`
-                  : `${med.medicationName} ${med.dosage} mg`}
-              </Text>
-            );
-          })
-        ) : (
-          <Text style={styles.medText}>No medications for this date</Text>
-        )}
+        <View style={styles.flexColumn}>
+          <Text style={styles.dateText}>{selected ? formatDate(selected) : "No date selected"}</Text>
+          {filteredMedications.length > 0 ? (
+
+                  <TableExample
+                      namePills={filteredMedications.map((med) => med.medicationName)}
+                      amount={filteredMedications.map((med) => `${med.dosage} mg`)}
+                      isPast={filteredMedications.map(() => isPast)}
+                  />
+          )
+              : (
+              <Text style={styles.medText}>No medications for this date</Text>
+          )}
+        </View>
+        </ScrollView>
       </View>
-    </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -120,7 +120,6 @@ const styles = StyleSheet.create({
   },
   flexColumn: {
     alignItems: "center",
-    marginTop: 40,
     justifyContent: "flex-start",
     flex: 1,
   },
@@ -141,8 +140,10 @@ const styles = StyleSheet.create({
   },
   medText: {
     fontFamily: "Antic",
-    fontSize: 20,
+    fontSize: 18,
     paddingHorizontal: 15,
+    width: "90%",
+    textAlign: "center",
   },
   header: {
     paddingTop: 50,
@@ -155,4 +156,5 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     fontFamily: "Gambetta",
   },
-});
+})
+

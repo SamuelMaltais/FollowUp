@@ -102,8 +102,9 @@ export default function App() {
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Home</Text>
           <Text style={styles.greeting}>Hello, {user.name}</Text>
-
-          <TodayDate date={undefined} />
+          <View style={{alignItems: "center"} }>
+            <TodayDate date={undefined} />
+          </View>
 
           <Text style={styles.party}>Happy Women's Day !</Text>
         </View>
