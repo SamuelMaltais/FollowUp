@@ -127,24 +127,6 @@ export default function App() {
               medication={med}
             />
           ))}
-
-        <MedicationCard
-          time="11:00 am"
-          medicationName="Potassium K20 in pills"
-          amount="1 pill"
-          imageSource={require("./../../assets/images/comprime2.png")}
-          handlePress={handlePress}
-          medication={medications[0]}
-        />
-
-        <MedicationCard
-          time="2:00 pm"
-          medicationName="Potassium K20 in tablet"
-          amount="2 tablets"
-          imageSource={require("./../../assets/images/comprime.png")}
-          handlePress={handlePress}
-          medication={medications[0]}
-        />
       </ScrollView>
     </SafeAreaView>
   );
