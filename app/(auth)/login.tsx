@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   SafeAreaView,
@@ -13,6 +13,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { colors } from "@/component/colors";
 import { useUserStore } from "@/services/useUserStore";
+import NotificationManager from "@/services/notificationService";
 
 export default function Login() {
   const setUser = useUserStore((state) => state.setUser);
@@ -32,6 +33,10 @@ export default function Login() {
       params: {},
     });
   };
+
+  useEffect(() => {
+    new NotificationManager();
+  }, []);
 
   return (
     <SafeAreaProvider style={styles.safeAreaProvider}>
