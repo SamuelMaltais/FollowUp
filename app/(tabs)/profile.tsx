@@ -1,7 +1,7 @@
 import {Text, View, StyleSheet, SafeAreaView, Animated} from "react-native";
 import { colors } from "@/component/colors";
 import ScrollView = Animated.ScrollView;
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {User} from "@/services/schemas/User";
 import {UserService} from "@/services/user";
 import 'react-native-get-random-values';
@@ -72,6 +72,9 @@ const UserName = (props: UserNameProp) => {
   return (
       <SafeAreaView>
           <ScrollView>
+              <View style={styles.headerBar}>
+                  <Text style={styles.headerTitle}>Profile</Text>
+              </View>
 
         <Text style={styles.header}>{props.name}</Text>
 
@@ -193,6 +196,16 @@ const styles = StyleSheet.create({
         marginBottom:10
     },
     underline: {textDecorationLine: 'underline'},
+    headerBar: {
+        backgroundColor: "white",
+        alignItems: "center",
+    },
+    headerTitle: {
+        color: "#aaaaaa",
+        fontSize: 16,
+        marginBottom: 8,
+        fontFamily: "Gambetta",
+    },
 
 });
 

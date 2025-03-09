@@ -22,8 +22,11 @@ async function getMedications(setMedications: Function) {
   setMedications(medications);
 }
 
+
 export default function CalendarView() {
   const [selected, setSelected] = useState("");
+
+
   console.log(selected);
   const [medications, setMedications] = useState<Medication[]>([]);
   console.log(medications);
@@ -33,25 +36,31 @@ export default function CalendarView() {
 
   const filteredMedications = medications.filter(
     (med) =>
-      med.lastTakenDate.toISOString().split("T")[0] === selected
-  );
+      //med.lastTakenDate.toISOString().split("T")[0] === selected
+      med.allDosages.map(date => date.toISOString().split("T")[0]).includes(selected)  );
 
   console.log(filteredMedications);
 
-  var markedDates: any = {};
-  medications.forEach((med) => {
-    markedDates[med.lastTakenDate.toISOString().split("T")[0]] = {
-      marked: true,
-      dotColor: "orange",
-    };
-  });
-  markedDates[selected] = {
-    selected: true,
-    disableTouchEvent: true,
-    selectedDotColor: "orange",
-  };
+  // var markedDates: any = {};
+  // medications.forEach((med) => {
+  //   med.allDosages.forEach((dosageDate) => {
+  //     const dateString = dosageDate.toISOString().split("T")[0];
+  //     markedDates[dateString] = {
+  //       marked: true,
+  //       dotColor: "red",
+  //     };
+  //   });
+  // });
+  // markedDates[selected] = {
+  //   selected: true,
+  //   disableTouchEvent: true,
+  //   selectedDotColor: "red",
+  // };
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Calendar</Text>
+      </View>
       <Calendar
         onDayPress={(day: any) => {
           setSelected(day.dateString);
@@ -62,30 +71,41 @@ export default function CalendarView() {
         backgroundColor: '#ffffff',
         calendarBackground: '#ffffff',
         textSectionTitleColor: colors.space_cadet,
-        selectedDayBackgroundColor: colors.lavender,
-        selectedDayTextColor: colors.space_cadet,
+        selectedDayBackgroundColor: colors.space_cadet,
+        selectedDayTextColor: colors.lavender,
         todayTextColor: colors.orange,
         dayTextColor: '#2d4150',
         textDisabledColor: colors.peach_yellow
       }}
-        markedDates={markedDates}
+        markedDates={{ // dont have any selected (???)
+          [selected]: {selected: true, disableTouchEvent: true, selectedDotColor: 'orange'}
+        }}
       />
 
       <View style={styles.flexColumn}>
-        {/*<TodayDate date={selected} />*/}
         <Text style={styles.dateText}>
           {selected ? formatDate(selected) : "No date selected"}
         </Text>
         {filteredMedications.length > 0 ? (
-          filteredMedications.map((med, index) => (
-            <Text key={index} style={[styles.medText]}>
-              You have taken {med.medicationName} last time on{" "}
-              <Text>
-                 {formatDate(med.lastTakenDate.toISOString().split("T")[0])}
-              </Text>
-            </Text>
-          ))
-        ) : (
+              filteredMedications.map((med, index) => {
+                const today = new Date();
+                const selectedDate = new Date(selected);
+                const isPast = selectedDate < today;
+                return (
+                    <Text
+                        key={index}
+                        style={styles.medText}
+                    >
+                      {isPast
+                          ? `You have taken ${med.medicationName} ${med.dosage} mg ✅`
+                          : `${med.medicationName} ${med.dosage} mg`}
+                    </Text>
+                );
+              })
+
+        )
+            :
+            (
           <Text style={styles.medText}>No medications for this date</Text>
         )}
       </View>
@@ -97,6 +117,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
+    paddingTop: 15,
   },
   flexColumn: {
     alignItems: "center",
@@ -123,5 +144,16 @@ const styles = StyleSheet.create({
     fontFamily: "Antic",
     fontSize: 20,
     paddingHorizontal: 15,
-  }
+  },
+  header: {
+    backgroundColor: "white",
+    alignItems: "center",
+  },
+  headerTitle: {
+    color: "#aaaaaa",
+    fontSize: 16,
+    marginBottom: 8,
+    fontFamily: "Gambetta",
+  },
+
 });
