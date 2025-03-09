@@ -109,7 +109,9 @@ export const MedicationCard = ({
           //disable the button by doing true (Optional)
           swipeSuccessThreshold={70}
           width={Dimensions.get("window").width - 120}
-          title="Confirm taken >>"
+          title={
+            submitted ? "You have taken that medication !" : "Confirm taken >>"
+          }
           titleFontSize={16}
           titleColor="#666"
           thumbIconComponent={submitted ? CheckMarkIcon : ArrowIcon}
