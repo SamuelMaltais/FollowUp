@@ -32,8 +32,7 @@ export default function CalendarView() {
   }, []);
 
   const filteredMedications = medications.filter(
-    (med) =>
-      med.lastTakenDate.toISOString().split("T")[0] === selected
+    (med) => med.lastTakenDate.toISOString().split("T")[0] === selected
   );
 
   console.log(filteredMedications);
@@ -59,20 +58,21 @@ export default function CalendarView() {
         initialDate={selected}
         style={styles.calendar}
         theme={{
-        backgroundColor: '#ffffff',
-        calendarBackground: '#ffffff',
-        textSectionTitleColor: colors.space_cadet,
-        selectedDayBackgroundColor: colors.lavender,
-        selectedDayTextColor: colors.space_cadet,
-        todayTextColor: colors.orange,
-        dayTextColor: '#2d4150',
-        textDisabledColor: colors.peach_yellow
-      }}
+          backgroundColor: "#ffffff",
+          calendarBackground: "#ffffff",
+          textSectionTitleColor: colors.space_cadet,
+          selectedDayBackgroundColor: colors.lavender,
+          selectedDayTextColor: colors.space_cadet,
+          todayTextColor: colors.orange,
+          dayTextColor: "#2d4150",
+          textDisabledColor: colors.peach_yellow,
+        }}
         markedDates={markedDates}
       />
 
       <View style={styles.flexColumn}>
         {/*<TodayDate date={selected} />*/}
+        <Notification />
         <Text style={styles.dateText}>
           {selected ? formatDate(selected) : "No date selected"}
         </Text>
@@ -81,7 +81,7 @@ export default function CalendarView() {
             <Text key={index} style={[styles.medText]}>
               You have taken {med.medicationName} last time on{" "}
               <Text>
-                 {formatDate(med.lastTakenDate.toISOString().split("T")[0])}
+                {formatDate(med.lastTakenDate.toISOString().split("T")[0])}
               </Text>
             </Text>
           ))
@@ -123,5 +123,5 @@ const styles = StyleSheet.create({
     fontFamily: "Antic",
     fontSize: 20,
     paddingHorizontal: 15,
-  }
+  },
 });
