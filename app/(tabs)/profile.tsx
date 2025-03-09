@@ -74,11 +74,10 @@ const supportedURL = "https://maps.app.goo.gl/1ceodaCrVgR2X7BG9";
 
 type OpenURLButtonProps = {
   url: string;
-  children: string;
   text: string;
 };
 
-const OpenURLButton = ({url, children, text}: OpenURLButtonProps) => {
+const OpenURLButton = ({url, text}: OpenURLButtonProps) => {
   const handlePress = useCallback(async () => {
     // Checking if the link is supported for links with custom URL scheme.
     const supported = await Linking.canOpenURL(url);
