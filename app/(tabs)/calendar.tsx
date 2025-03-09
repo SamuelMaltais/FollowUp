@@ -6,6 +6,7 @@ import { MedicationService } from "@/services/medicationService";
 import { Medication } from "@/services/schemas/Medication";
 import { colors } from "@/component/colors";
 import TodayDate from "@/component/TodayDate";
+import { useUserStore } from "@/services/useUserStore";
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString + "T00:00:00"); // Ensure it starts at midnight local time
@@ -17,19 +18,18 @@ const formatDate = (dateString: string) => {
   return date.toLocaleDateString("en-US", options);
 };
 
-async function getMedications(setMedications: Function) {
-  const medications = await MedicationService.getPrescriptions("Jackson");
+async function getMedications(setMedications: Function, name: string) {
+  const medications = await MedicationService.getPrescriptions(name);
   setMedications(medications);
 }
 
 export default function CalendarView() {
   const [selected, setSelected] = useState("");
-
-  console.log(selected);
+  const username = useUserStore((state) => state.name);
   const [medications, setMedications] = useState<Medication[]>([]);
-  console.log(medications);
+
   useEffect(() => {
-    getMedications(setMedications);
+    getMedications(setMedications, username);
   }, []);
 
   const filteredMedications = medications.filter((med) =>

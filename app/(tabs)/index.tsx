@@ -20,9 +20,10 @@ import { User } from "@/services/schemas/User";
 import { Medication } from "@/services/schemas/Medication";
 import { MedicationService } from "@/services/medicationService";
 import LoadingScreen from "@/component/loading";
+import { useUserStore } from "@/services/useUserStore";
 
-async function getMedications(setMedications: Function) {
-  const medications = await MedicationService.getPrescriptions("Jackson");
+async function getMedications(setMedications: Function, name: string) {
+  const medications = await MedicationService.getPrescriptions(name);
   setMedications(medications);
 }
 
@@ -52,9 +53,10 @@ const loadFonts = () => {
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
-  const [user, setUser] = useState<User>();
   const [medications, setMedications] = useState<Medication[]>([]);
+  const [user, setUser] = useState<User>();
 
+  const username = useUserStore((state) => state.name);
   const router = useRouter();
 
   const handlePress = () => {
@@ -69,8 +71,8 @@ export default function App() {
     async function prepare() {
       try {
         await loadFonts();
-        await fetchUser("Jane Doe", setUser);
-        await getMedications(setMedications);
+        await fetchUser(username, setUser);
+        await getMedications(setMedications, username);
         setFontsLoaded(true);
       } catch (e) {
         console.warn(e);

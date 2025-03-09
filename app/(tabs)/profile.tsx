@@ -1,4 +1,11 @@
-import { Text, View, StyleSheet, SafeAreaView, Animated, Image } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  SafeAreaView,
+  Animated,
+  Image,
+} from "react-native";
 import { colors } from "@/component/colors";
 import ScrollView = Animated.ScrollView;
 import React, { useEffect, useState } from "react";
@@ -7,6 +14,7 @@ import { UserService } from "@/services/user";
 import "react-native-get-random-values";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import TableExample from "@/component/table";
+import { useUserStore } from "@/services/useUserStore";
 
 async function fetchUser(name: string, setUser: Function): Promise<void> {
   try {
@@ -20,9 +28,10 @@ async function fetchUser(name: string, setUser: Function): Promise<void> {
 
 export default function Profile() {
   const [user, setUser] = useState<User>();
+  const username = useUserStore((state) => state.name);
 
   useEffect(() => {
-    fetchUser("Jane Doe", setUser);
+    fetchUser(username, setUser);
   }, []);
 
   if (!user) {
@@ -71,23 +80,18 @@ const WordList: React.FC<WordListProps> = ({ words, center }) => {
 
 const UserName = (props: UserNameProp) => {
   return (
-    <ScrollView style={{padding:10}}>
-        <View style={styles.imageProfileContainer}>
-            <Image
-                source={require('./../../assets/images/profile.png')}
-                style={styles.imageProfile}
-            />
-        </View>
-        <View style={styles.headerBar}>
-          <Text style={styles.headerTitle}>Profile</Text>
-        </View>
+    <ScrollView style={{ padding: 10 }}>
+      <View style={styles.imageProfileContainer}>
+        <Image
+          source={require("./../../assets/images/profile.png")}
+          style={styles.imageProfile}
+        />
+      </View>
+      <View style={styles.headerBar}>
+        <Text style={styles.headerTitle}>Profile</Text>
+      </View>
 
-        <Text style={styles.header}>{props.name}</Text>
-
-
-
-
-
+      <Text style={styles.header}>{props.name}</Text>
 
       <View style={styles.profileInfo}>
         <View style={styles.profileDetails}>
@@ -100,96 +104,96 @@ const UserName = (props: UserNameProp) => {
             <Text style={styles.text}>F</Text>
           </View>
 
+          <View style={styles.profileText}>
+            <Ionicons
+              name="home-outline"
+              size={24}
+              style={{ paddingRight: 10 }}
+            />
 
-        <View style={styles.profileText}>
-          <Ionicons name="home-outline" size={24} style={{paddingRight: 10}}/>
-
-          <Text style={styles.subtitle}>Address: </Text>
-          <Text style={[styles.text, styles.underline]}>
-            123 ascdfwfdd
-          </Text>
-          {/*TODO: CLICKABLE! */}
-        </View>
-
-        <View style={styles.profileText}>
-          <Ionicons name="call-outline" size={24} style={{paddingRight: 10}}/>
-          <Text style={styles.subtitle}>
-            Phone Number:{" "}
-          </Text>
-          <Text style={[styles.text, styles.underline]}>514-xxx-xxxx</Text>{" "}
-          {/*TODO: CLICKABLE! */}
-        </View>
+            <Text style={styles.subtitle}>Address: </Text>
+            <Text style={[styles.text, styles.underline]}>123 ascdfwfdd</Text>
+            {/*TODO: CLICKABLE! */}
+          </View>
 
           <View style={styles.profileText}>
-            <Ionicons name="call-outline" size={24} style={{paddingRight: 10}}/>
-            <Text style={[styles.subtitle, {color: "red"}]}>
+            <Ionicons
+              name="call-outline"
+              size={24}
+              style={{ paddingRight: 10 }}
+            />
+            <Text style={styles.subtitle}>Phone Number: </Text>
+            <Text style={[styles.text, styles.underline]}>
+              514-xxx-xxxx
+            </Text>{" "}
+            {/*TODO: CLICKABLE! */}
+          </View>
+
+          <View style={styles.profileText}>
+            <Ionicons
+              name="call-outline"
+              size={24}
+              style={{ paddingRight: 10 }}
+            />
+            <Text style={[styles.subtitle, { color: "red" }]}>
               Emergency :{" "}
             </Text>
             <Text style={[styles.text, styles.underline]}>514-xxx-xxxx</Text>{" "}
             {/*TODO: CLICKABLE! */}
           </View>
         </View>
-
-
       </View>
 
-
-
-
       {/*Health information*/}
-        <View style={{ margin: 20 }}>
-          <Text style={styles.header2}>Health information</Text>
-          <View style={styles.profileText}>
-            <Text style={styles.subtitle}>Conditions: </Text>
-            <WordList words={props.ailments} center={false} />
-          </View>
-          <View style={styles.profileText}>
-            <Text style={styles.subtitle}>Blood type: </Text>
-            <Text style={styles.text}>O-</Text>
-          </View>
-          <View style={styles.profileText}>
-            <Text style={styles.subtitle}>Allergies: </Text>
-            <WordList words={"Peanuts"} center={false} />
-          </View>
+      <View style={{ margin: 20 }}>
+        <Text style={styles.header2}>Health information</Text>
+        <View style={styles.profileText}>
+          <Text style={styles.subtitle}>Conditions: </Text>
+          <WordList words={props.ailments} center={false} />
         </View>
-
-      <View style={styles.lineStyle}/>
-        {/*Active meds */}
-        <View style={{ margin: 20, alignItems: "center" }}>
-          <Text style={[styles.header2]}>Active medications</Text>
-          <TableExample />
+        <View style={styles.profileText}>
+          <Text style={styles.subtitle}>Blood type: </Text>
+          <Text style={styles.text}>O-</Text>
         </View>
-
-
-        {/*Nearest pharmacy*/}
-        <View style={{ margin: 20, alignItems: "center" }}>
-          <Text style={styles.header2}>Nearest pharmacy</Text>
-          <Text
-            style={{
-              marginBottom: 10,
-              fontFamily: "Gambetta",
-              color: "#A6A4A4",
-              fontSize: 16,
-            }}
-          >
-            Based on current location
-          </Text>
-          <View style={styles.profileText}>
-            <Text style={styles.subtitle}>Name: </Text>
-            <Text style={styles.text}>Pharmaprix</Text>
-          </View>
-          <View style={styles.profileText}>
-            <Text style={styles.subtitle}>Address: </Text>
-            <Text style={[styles.text, styles.underline]}>123 abc</Text>
-          </View>
-          <View style={styles.profileText}>
-            <Text style={styles.subtitle}>Phone Number: </Text>
-            <Text style={[styles.text, styles.underline]}>514-xxx-xxxx</Text>
-          </View>
-
+        <View style={styles.profileText}>
+          <Text style={styles.subtitle}>Allergies: </Text>
+          <WordList words={"Peanuts"} center={false} />
         </View>
+      </View>
 
+      <View style={styles.lineStyle} />
+      {/*Active meds */}
+      <View style={{ margin: 20, alignItems: "center" }}>
+        <Text style={[styles.header2]}>Active medications</Text>
+        <TableExample />
+      </View>
 
+      {/*Nearest pharmacy*/}
+      <View style={{ margin: 20, alignItems: "center" }}>
+        <Text style={styles.header2}>Nearest pharmacy</Text>
+        <Text
+          style={{
+            marginBottom: 10,
+            fontFamily: "Gambetta",
+            color: "#A6A4A4",
+            fontSize: 16,
+          }}
+        >
+          Based on current location
+        </Text>
+        <View style={styles.profileText}>
+          <Text style={styles.subtitle}>Name: </Text>
+          <Text style={styles.text}>Pharmaprix</Text>
+        </View>
+        <View style={styles.profileText}>
+          <Text style={styles.subtitle}>Address: </Text>
+          <Text style={[styles.text, styles.underline]}>123 abc</Text>
+        </View>
+        <View style={styles.profileText}>
+          <Text style={styles.subtitle}>Phone Number: </Text>
+          <Text style={[styles.text, styles.underline]}>514-xxx-xxxx</Text>
+        </View>
+      </View>
     </ScrollView>
   );
 };
@@ -248,41 +252,39 @@ const styles = StyleSheet.create({
     fontFamily: "Gambetta",
   },
 
-
-
   imageProfileContainer: {
-    alignSelf: 'center',
+    alignSelf: "center",
     borderRadius: 50,
     width: 100, // Largeur ajustée
     height: 100, // Hauteur ajustée
-    borderColor: '#fff',
+    borderColor: "#fff",
     borderWidth: 1, // Ajout d'une bordure visible
-    shadowColor: '#FFA500', // Couleur de l'ombre (orange foncé)
+    shadowColor: "#FFA500", // Couleur de l'ombre (orange foncé)
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.8,
     shadowRadius: 3,
     elevation: 5, // Pour les ombres sous Android
     marginVertical: 30,
-    overflow: 'hidden', // Pour que l'image respecte les bordures arrondies
+    overflow: "hidden", // Pour que l'image respecte les bordures arrondies
   },
   imageProfile: {
-    width: '100%', // L'image s'ajuste à la taille du conteneur
-    height: '100%',
-    resizeMode: 'cover', // Ajuste l'image en couvrant tout l'espace
+    width: "100%", // L'image s'ajuste à la taille du conteneur
+    height: "100%",
+    resizeMode: "cover", // Ajuste l'image en couvrant tout l'espace
   },
   profileInfo: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     margin: 20,
     borderWidth: 1,
-    backgroundColor : "#fff",
+    backgroundColor: "#fff",
     borderRadius: 20,
-    borderColor: '#fff',
+    borderColor: "#fff",
     shadowColor: "#d9d9d9",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.8,
     shadowRadius: 3,
-    padding: 20
+    padding: 20,
   },
   profileDetails: {
     flex: 1,
