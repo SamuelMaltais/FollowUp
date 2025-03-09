@@ -146,11 +146,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   header: {
+    paddingTop: 50,
     backgroundColor: "white",
     alignItems: "center",
   },
   headerTitle: {
-    color: "#aaaaaa",
+    color: "#000",
     fontSize: 16,
     marginBottom: 8,
     fontFamily: "Gambetta",
