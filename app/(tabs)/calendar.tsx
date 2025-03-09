@@ -22,10 +22,8 @@ async function getMedications(setMedications: Function) {
   setMedications(medications);
 }
 
-
 export default function CalendarView() {
   const [selected, setSelected] = useState("");
-
 
   console.log(selected);
   const [medications, setMedications] = useState<Medication[]>([]);
@@ -34,10 +32,12 @@ export default function CalendarView() {
     getMedications(setMedications);
   }, []);
 
-  const filteredMedications = medications.filter(
-    (med) =>
-      //med.lastTakenDate.toISOString().split("T")[0] === selected
-      med.allDosages.map(date => date.toISOString().split("T")[0]).includes(selected)  );
+  const filteredMedications = medications.filter((med) =>
+    //med.lastTakenDate.toISOString().split("T")[0] === selected
+    med.allDosages
+      .map((date) => date.toISOString().split("T")[0])
+      .includes(selected)
+  );
 
   console.log(filteredMedications);
 
@@ -68,17 +68,22 @@ export default function CalendarView() {
         initialDate={selected}
         style={styles.calendar}
         theme={{
-        backgroundColor: '#ffffff',
-        calendarBackground: '#ffffff',
-        textSectionTitleColor: colors.space_cadet,
-        selectedDayBackgroundColor: colors.space_cadet,
-        selectedDayTextColor: colors.lavender,
-        todayTextColor: colors.orange,
-        dayTextColor: '#2d4150',
-        textDisabledColor: colors.peach_yellow
-      }}
-        markedDates={{ // dont have any selected (???)
-          [selected]: {selected: true, disableTouchEvent: true, selectedDotColor: 'orange'}
+          backgroundColor: "#ffffff",
+          calendarBackground: "#ffffff",
+          textSectionTitleColor: colors.space_cadet,
+          selectedDayBackgroundColor: colors.space_cadet,
+          selectedDayTextColor: colors.lavender,
+          todayTextColor: colors.orange,
+          dayTextColor: "#2d4150",
+          textDisabledColor: colors.peach_yellow,
+        }}
+        markedDates={{
+          // dont have any selected (???)
+          [selected]: {
+            selected: true,
+            disableTouchEvent: true,
+            selectedDotColor: "orange",
+          },
         }}
       />
 
@@ -87,25 +92,19 @@ export default function CalendarView() {
           {selected ? formatDate(selected) : "No date selected"}
         </Text>
         {filteredMedications.length > 0 ? (
-              filteredMedications.map((med, index) => {
-                const today = new Date();
-                const selectedDate = new Date(selected);
-                const isPast = selectedDate < today;
-                return (
-                    <Text
-                        key={index}
-                        style={styles.medText}
-                    >
-                      {isPast
-                          ? `You have taken ${med.medicationName} ${med.dosage} mg ✅`
-                          : `${med.medicationName} ${med.dosage} mg`}
-                    </Text>
-                );
-              })
-
-        )
-            :
-            (
+          filteredMedications.map((med, index) => {
+            const today = new Date();
+            const selectedDate = new Date(selected);
+            const isPast = selectedDate < today;
+            return (
+              <Text key={index} style={styles.medText}>
+                {isPast
+                  ? `You have taken ${med.medicationName} ${med.dosage} mg ✅`
+                  : `${med.medicationName} ${med.dosage} mg`}
+              </Text>
+            );
+          })
+        ) : (
           <Text style={styles.medText}>No medications for this date</Text>
         )}
       </View>
@@ -156,5 +155,4 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     fontFamily: "Gambetta",
   },
-
 });
